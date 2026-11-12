@@ -188,7 +188,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 <!-- BEGINNER -->
 <section class="view wrap page" id="v-beginner">
   <h2>3つ答えるだけで、<br>プランが決まります。</h2>
-  <p class="intro">わからなければ「わからない」でOK。あとから相談できます。</p>
+  <p class="intro">長さが未定なら「まだ決めていない」でOK。あとから相談できます。</p>
 
   <div class="q"><fieldset><legend>どのくらいの長さを歌いましたか？</legend><div class="opts" id="q1">
     <label><input type="radio" name="len" value="short"><span>30秒くらい（サビだけ等）</span></label>
@@ -276,11 +276,11 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     <h2>依頼フォーム</h2>
     <p class="intro">必須は4つだけ。送信しただけでは料金は発生しません。</p>
     <form id="orderForm" novalidate>
-      <div class="f"><label for="name">お名前（活動名）</label><input id="name" name="name" autocomplete="nickname"><div class="err" id="e-name"></div></div>
-      <div class="f"><label for="contact">連絡先メールアドレス</label><input id="contact" name="contact" type="email" autocomplete="email" inputmode="email"><div class="err" id="e-contact"></div></div>
-      <div class="f"><label for="song">曲名</label><input id="song" name="song" placeholder="例：〇〇／原曲URLでも可"><div class="err" id="e-song"></div></div>
+      <div class="f"><label for="name">お名前（活動名）</label><input id="name" name="name" required aria-describedby="e-name" autocomplete="nickname"><div class="err" id="e-name"></div></div>
+      <div class="f"><label for="contact">連絡先メールアドレス</label><input id="contact" name="contact" required aria-describedby="e-contact" type="email" autocomplete="email" inputmode="email"><div class="err" id="e-contact"></div></div>
+      <div class="f"><label for="song">曲名</label><input id="song" name="song" required aria-describedby="e-song" placeholder="例：〇〇／原曲URLでも可"><div class="err" id="e-song"></div></div>
       <div class="f"><label for="plan">プラン</label>
-        <select id="plan" name="plan">
+        <select id="plan" name="plan" required aria-describedby="e-plan">
           <option value="">選んでください</option>
           <option>相談して決めたい</option>
           <option>ショート ¥6,500</option>
@@ -485,26 +485,42 @@ function evalQuiz(){
 }
 document.querySelectorAll('#v-beginner input').forEach(i=>i.addEventListener('change',evalQuiz));
 document.getElementById('toOrderFromQuiz').addEventListener('click',()=>{
-  if(chosen) document.getElementById('plan').value = chosen.plan;
-  if(rush) document.getElementById('note').value = '特急希望';
+  if(chosen){
+    document.getElementById('plan').value = chosen.plan;
+    clearFieldError('plan');
+  }
+  // 診断が追加した行だけ更新し、依頼者が書いた希望は残す。
+  const note = document.getElementById('note'), marker = '【プラン診断】特急希望';
+  const lines = note.value.split('\n').filter(line => line !== marker);
+  if(rush) lines.push(marker);
+  note.value = lines.join('\n').replace(/^\n/, '');
   location.hash = 'order';
 });
 
 /* form */
 const form = document.getElementById('orderForm');
 const req = {name:'お名前を入力してください', contact:'メールアドレスを入力してください', song:'曲名を入力してください', plan:'プランを選んでください'};
-Object.keys(req).forEach(k=>document.getElementById(k).addEventListener('input',()=>document.getElementById('e-'+k).textContent=''));
+function clearFieldError(k){
+  document.getElementById('e-'+k).textContent = '';
+  document.getElementById(k).removeAttribute('aria-invalid');
+}
+Object.keys(req).forEach(k=>document.getElementById(k).addEventListener('input',()=>clearFieldError(k)));
 form.addEventListener('submit', async e=>{
   e.preventDefault();
-  let ok = true;
+  let firstInvalid = null;
   for(const k in req){
     const v = document.getElementById(k).value.trim();
     let msg = v ? '' : req[k];
     if(k==='contact' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) msg = 'メールアドレスの形式を確認してください';
     document.getElementById('e-'+k).textContent = msg;
-    if(msg) ok = false;
+    document.getElementById(k).setAttribute('aria-invalid', String(Boolean(msg)));
+    if(msg && !firstInvalid) firstInvalid = document.getElementById(k);
   }
-  if(!ok) return;
+  if(firstInvalid){
+    firstInvalid.focus();
+    firstInvalid.scrollIntoView({block:'center', behavior:'instant'});
+    return;
+  }
   const btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.textContent = '送信しています';
   try{
