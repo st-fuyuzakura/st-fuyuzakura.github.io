@@ -70,10 +70,16 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:8
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .ab .play{display:inline-flex;align-items:center;gap:10px;margin-right:8px}
 .ab button[hidden],.ab .time[hidden]{display:none}
-.ab .seg{display:inline-flex}
-.ab .seg button{border-radius:0;margin-left:-1px}
-.ab .seg button:first-child{border-radius:2px 0 0 2px;margin-left:0}
-.ab .seg button:last-child{border-radius:0 2px 2px 0}
+.ab .seg{display:inline-flex;position:relative;border:1px solid var(--line);border-radius:999px;padding:3px;isolation:isolate}
+.ab .seg button,.ab .seg button[aria-pressed="true"]{border:0;border-radius:999px;background:none;color:var(--sub);position:relative;z-index:1;transition:color .3s;min-height:38px}
+.ab .seg button[aria-pressed="true"]{color:var(--bg)}
+.ab .seg button:hover:not([aria-pressed="true"]){color:var(--ink)}
+.ab .seg .ind{position:absolute;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--ink);z-index:0;transition:transform .45s cubic-bezier(.2,.8,.2,1),width .45s cubic-bezier(.2,.8,.2,1)}
+.ab .play{border-radius:999px!important;position:relative}
+.ab .play.hint::after{content:"";position:absolute;inset:-1px;border-radius:999px;border:1px solid var(--ink);animation:ring 2.2s ease-out infinite;pointer-events:none}
+@keyframes ring{0%{opacity:.7;transform:scale(1)}80%,100%{opacity:0;transform:scale(1.35)}}
+@media (prefers-reduced-motion:reduce){.ab .play.hint::after{animation:none;opacity:.5}}
+#fx.tap{cursor:pointer}
 @media(max-width:620px){
   .ab .play{width:44px;padding:0;justify-content:center;margin-right:4px}
   .ab .play .lb{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -212,9 +218,10 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
       <div class="ab" role="group" aria-label="聴き比べ">
         <button type="button" id="bPlay" class="play" aria-pressed="false" hidden><span class="ico" aria-hidden="true"></span><span class="lb">再生</span></button>
         <span class="seg">
-          <button type="button" id="bBefore" aria-pressed="true">MIX前</button>
+          <button type="button" id="bBefore" aria-pressed="false">MIX前</button>
           <button type="button" id="bAfter" aria-pressed="false">MIX後</button>
-          <button type="button" id="bMaster" aria-pressed="false">マスタリング後</button>
+          <button type="button" id="bMaster" aria-pressed="true">マスタリング後</button>
+          <span class="ind" aria-hidden="true"></span>
         </span>
         <span class="time" id="tm" hidden>0:00 / 0:00</span>
         <small id="audioNote">サンプル音源は準備中です。</small>
@@ -397,7 +404,7 @@ show();
    読めない間は描画した波形で、再生位置の線がゆっくり流れる */
 const cv = document.getElementById('fx'), cx = cv.getContext('2d');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let W=0,H=0,DPR=1,B=[],mode=0,mix=0,raf=0,t0=performance.now();
+let W=0,H=0,DPR=1,B=[],mode=2,mix=2,raf=0,t0=performance.now();
 function rnd(i){ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
 
 /* 音源（Web Audio API）。MIX前・MIX後・マスタリング後を同時に鳴らし、音量だけ切り替えるので位置がずれない */
@@ -490,7 +497,7 @@ function startAudio(){
   ids.forEach(i=>{ const g=c.createGain(); g.gain.value=i===mode?1:0; g.connect(c.destination); AU.gain[i]=g; });
   AU.startAt=c.currentTime+0.03;
   AU.src=ids.map(i=>{ const s=c.createBufferSource(); s.buffer=AU.buf[i]; s.connect(AU.gain[i]); s.start(AU.startAt, AU.offset); return s; });
-  AU.playing=true; bP.setAttribute('aria-pressed','true'); bP.querySelector('.lb').textContent='停止';
+  bP.classList.remove('hint'); AU.playing=true; bP.setAttribute('aria-pressed','true'); bP.querySelector('.lb').textContent='停止';
   kick();
 }
 function stopAudio(ended){
@@ -507,9 +514,20 @@ function pick(m, auto){
   if(m===2 && AU.buf[0] && !AU.buf[2]) m=1;
   mode = m;
   modeBtns.forEach((b,i)=>b.setAttribute('aria-pressed', i===m));
-  setGains(); kick();
+  setGains(); kick(); moveInd(true);
 }
-modeBtns.forEach((b,i)=>b.addEventListener('click',()=>pick(i)));
+/* 選択中の段階に白い下地がスライドする（切り替えられることを動きで伝える） */
+const ind=document.querySelector('.seg .ind');
+function moveInd(anim){
+  const b=modeBtns[mode]; if(!b||!b.offsetWidth) return;
+  ind.style.transition=anim&&!reduce?'':'none';
+  ind.style.transform='translateX('+b.offsetLeft+'px)'; ind.style.width=b.offsetWidth+'px';
+}
+window.addEventListener('resize',()=>moveInd(false));
+/* 段階を押したら、止まっていればそのまま再生する */
+modeBtns.forEach((b,i)=>b.addEventListener('click',()=>{ pick(i); if(AU.buf[0] && !AU.playing) startAudio(); }));
+/* 波形をタップしても再生／停止 */
+cv.addEventListener('click',()=>{ if(AU.buf[0]) bP.click(); });
 
 /* 音源の読み込み：before / after / master の .mp3 を優先し、無ければ .m4a（仮音源）を使う */
 async function loadOne(name){
@@ -527,14 +545,12 @@ async function loadOne(name){
     AU.buf=await Promise.all(raw.map(dec)); AU.ctx=ctx;
     if(!AU.buf[2]){ bM.hidden=true; if(mode===2) pick(1,true); }
     document.getElementById('audioNote').textContent='';
-    bP.hidden=false; tm.hidden=false; updTime();
+    bP.hidden=false; tm.hidden=false; updTime(); cv.classList.add('tap'); bP.classList.add('hint'); moveInd(false);
     fit();
   }catch(e){ /* 音源が無い・読めないときは描画した波形のまま */ }
 })();
 fit();
-/* 最初に MIX前 → MIX後 → マスタリング後 と順に変化を見せる */
-setTimeout(()=>pick(1,true), reduce?0:1100);
-setTimeout(()=>pick(2,true), reduce?0:2900);
+moveInd(false);
 setTimeout(()=>document.body.classList.remove('intro'), 2600);
 
 /* quiz */
