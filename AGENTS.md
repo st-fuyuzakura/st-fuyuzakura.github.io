@@ -37,7 +37,7 @@
 
 ## これからやること
 1. スマホ実機での表示確認と微調整（実機確認はまだ一度もできていない）
-2. GitHubでOrganization（例：`fuyuzakura-mix`）を作り、GitHub Pagesで公開
+2. ~~GitHub Pagesで公開~~ 済み：スタジオ用アカウント `st-fuyuzakura` のリポジトリ `st-fuyuzakura.github.io` → https://st-fuyuzakura.github.io/ （mainにpushすると数分で反映。ghは `~/.local/bin/gh`）
 3. Googleスプレッドシート＋Apps Scriptでフォーム受付を作り、ウェブアプリURLを `GAS_URL` に入れる
    - 受信 → スプシに記録（受付番号・ステータス）→ 依頼者へ受付メール → 本人へ通知
    - 固定料金プランは受付メールに金額と納期を自動記載、「相談」やオプション付きだけ手動で見積もり
@@ -52,7 +52,7 @@
 
 ## フォルダ構成
 - `index.html`：サイト本体（1ファイル完結。GitHub Pagesでそのまま公開する）
-- `audio/`：サンプル音源（`before.mp3` と `after.mp3`。同じ長さ・同じ位置で書き出す。30秒程度の抜粋）。現在は仮の `.m4a` が入っている
+- `audio/`：サンプル音源（`before.mp3` と `after.mp3`。同じ長さ・同じ位置で書き出す。30秒程度の抜粋）。現在は仮の `.m4a` が入っている（公開しないよう `.gitignore` で除外。手元でだけ鳴る）
 - `.claude/launch.json`：確認用のローカルサーバー（`python3 -m http.server 8765`）。音源の読み込みはファイルを直接開くと動かないので、必ずサーバー経由で確認する
 - `gas/`：フォーム受付用のGoogle Apps Script（これから作る）
 - `AGENTS.md`：このファイル。唯一の正となる引き継ぎ・ルール
