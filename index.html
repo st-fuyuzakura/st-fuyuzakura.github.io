@@ -43,9 +43,10 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:8
 .branch{position:absolute!important;z-index:0!important;top:-64px;right:calc(-1 * clamp(28px,8vw,48px));width:min(62vw,420px);height:auto;pointer-events:none}
 .branch .ln line{stroke:var(--sub);stroke-width:.7;opacity:.8}
 .branch .st circle{fill:var(--sub)}
-.hero h1{font-family:var(--serif);font-size:clamp(27px,6.6vw,60px);line-height:1.45;font-weight:600;margin:0 0 20px;letter-spacing:.02em}
-.hero p.lead{color:var(--sub);margin:0 0 40px;max-width:24em;font-size:15px}
-.player{padding:0 0 8px;margin:8px 0 48px}
+.hero h1{font-family:var(--serif);font-size:clamp(28px,3.5vw,42px);line-height:1.6;font-weight:500;margin:0;letter-spacing:-.025em}
+.hero-copy{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:end;margin:0 0 40px}
+.hero p.lead{color:var(--sub);margin:0 0 7px;max-width:24em;font-size:16px;line-height:1.95}
+.player{padding:0 0 8px;margin:8px 0 44px}
 .stage{position:relative;height:clamp(110px,17svh,170px);margin:0 calc(-1 * clamp(28px,8vw,48px))}
 .stage canvas{display:block;width:100%;height:100%;}
 .hero h1 .l{display:block;overflow:hidden}
@@ -90,16 +91,21 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:8
 .ab .play[aria-pressed="true"]{background:transparent;color:var(--ink);border-color:var(--ink)}
 .ab .play[aria-pressed="true"] .ico{width:10px;height:12px;border:0;border-left:3px solid currentColor;border-right:3px solid currentColor;box-sizing:border-box}
 .ab .time{font-family:var(--num,inherit);font-size:12px;color:var(--sub);margin-left:auto;font-variant-numeric:tabular-nums;letter-spacing:.04em}
-.doors{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
-.door{display:grid;grid-template-columns:auto 1fr auto;align-items:center;column-gap:16px;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:22px 4px;cursor:pointer;border-radius:0}
-.door+.door{border-left:1px solid var(--line);padding-left:24px}
-.door i{font-style:normal;font-family:var(--num);font-size:12px;color:var(--sub);letter-spacing:.08em;align-self:start;padding-top:5px}
-.door b{display:block;font-size:17px;margin-bottom:2px}
-.door span{color:var(--sub);font-size:13px;line-height:1.6;display:block}
-.door .ar{font-family:var(--num);font-size:18px;color:var(--sub);transition:transform .3s,color .3s}
-.door:hover .ar,.door:focus-visible .ar{transform:translateX(4px);color:var(--ink)}
-.door.main .ar{color:var(--ink)}
-@media(max-width:620px){.doors{grid-template-columns:1fr}.door+.door{border-left:0;padding-left:4px}}
+/* 入口は装飾番号を使わず、操作名と補足だけを揃える */
+.doors{display:flex;gap:36px;border-top:1px solid var(--line);padding-top:24px}
+.door{flex:1;min-width:0;display:block;text-align:left;border:0;background:none;padding:4px 0 12px;cursor:pointer;border-radius:0}
+.door b{display:inline-block;font-weight:500;font-size:17px;line-height:1.8;border-bottom:1px solid var(--sub);padding-bottom:2px;transition:border-color .2s}
+.door span{color:var(--sub);font-size:14px;line-height:1.7;display:block;margin-top:8px}
+.door:hover b,.door:focus-visible b{border-color:var(--ink)}
+@media(max-width:620px){
+  .hero-copy{grid-template-columns:1fr;gap:20px;margin-bottom:28px}
+  .hero h1{font-size:clamp(28px,7.3vw,40px);line-height:1.65}
+  .hero p.lead{margin:0;max-width:26em}
+  .player{margin-bottom:30px}
+  .doors{flex-direction:column;gap:20px;padding-top:22px}
+  .door{padding:0;min-height:64px}
+  .door span{margin-top:5px}
+}
 
 /* shared */
 .page{padding-top:24px;padding-bottom:96px}
@@ -179,13 +185,13 @@ input,select,textarea{font-size:16px}
 footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-size:13px;text-align:center}
 
 /* menu card */
-.menu{margin:24px 0 96px}
-.menu-card{position:relative;border:1px solid var(--line);padding:clamp(24px,5vw,44px);background:linear-gradient(180deg,var(--panel),var(--bg));overflow:hidden}
-.menu-card::before{content:"";position:absolute;inset:8px;border:1px solid var(--line);pointer-events:none;opacity:.6}
+.menu{margin:16px 0 80px}
+.menu-card{border-top:1px solid var(--line);padding:32px 0 0}
+
 .menu-head{display:flex;align-items:center;gap:16px;margin-bottom:28px}
-.menu-head svg{width:34px;height:34px;fill:var(--sakura);flex:none}
-.menu-en{margin:0;font-family:var(--num);font-size:11px;letter-spacing:.28em;color:var(--sub)}
-.menu-head h2{margin:2px 0 0;font-family:var(--serif);font-weight:600;font-size:clamp(20px,4.6vw,28px);letter-spacing:.06em}
+.menu-head svg{display:none}
+.menu-en{margin:0;font-family:var(--num);font-size:11px;letter-spacing:.08em;color:var(--sub)}
+.menu-head h2{margin:2px 0 0;font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:0}
 .menu-list{list-style:none;margin:0;padding:0}
 .menu-list li{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
 .menu-list li:first-child{border-top:1px solid var(--ink)}
@@ -195,7 +201,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 .mp::before{content:"¥";font-size:.6em;margin-right:2px;color:var(--sub)}
 .menu-inc{margin:18px 0 22px;font-size:13px;color:var(--sub);line-height:1.8}
 .menu-opt{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
-.menu-opt li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.menu-opt li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
 .menu-opt li span:last-child{font-family:var(--num);color:var(--sub)}
 .menu-foot{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-size:12px;color:var(--sub)}
 .menu-more{background:none;border:0;color:var(--ink);font-size:14px;cursor:pointer;padding:10px 0;min-height:44px;text-decoration:underline;text-underline-offset:4px}
@@ -228,12 +234,15 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
       </div>
     </div>
 
+    <div class="hero-copy">
     <h1><span class="l"><span>その歌声、</span></span><span class="l"><span>ちゃんと届く音に。</span></span></h1>
     <p class="lead">歌ってみたのボーカルMIX。録った素材を送るだけで、補正からマスタリングまで仕上げます。</p>
 
+    </div>
+
     <div class="doors">
-      <button class="door main" type="button" data-go="beginner"><i>01</i><div><b>はじめて依頼する</b><span>3つの質問でプランがわかります</span></div><span class="ar" aria-hidden="true">→</span></button>
-      <button class="door" type="button" data-go="pro"><i>02</i><div><b>料金・仕様を見る</b><span>依頼に慣れている方はこちら</span></div><span class="ar" aria-hidden="true">→</span></button>
+      <button class="door main" type="button" data-go="beginner"><b>はじめて依頼する</b><span>3つの質問でプランがわかります</span></button>
+      <button class="door" type="button" data-go="pro"><b>料金・仕様を見る</b><span>依頼に慣れている方はこちら</span></button>
     </div>
   </div>
 
