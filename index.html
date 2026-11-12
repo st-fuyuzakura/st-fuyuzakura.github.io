@@ -69,7 +69,17 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:8
 .ab small{color:var(--sub);flex-basis:100%;font-size:12px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .ab .play{display:inline-flex;align-items:center;gap:10px;margin-right:8px}
-.ab .play[hidden],.ab .time[hidden]{display:none}
+.ab button[hidden],.ab .time[hidden]{display:none}
+.ab .seg{display:inline-flex}
+.ab .seg button{border-radius:0;margin-left:-1px}
+.ab .seg button:first-child{border-radius:2px 0 0 2px;margin-left:0}
+.ab .seg button:last-child{border-radius:0 2px 2px 0}
+@media(max-width:620px){
+  .ab .play{width:44px;padding:0;justify-content:center;margin-right:4px}
+  .ab .play .lb{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .ab .seg button{padding:10px 12px;font-size:13px}
+  .ab .time{flex-basis:100%;text-align:right}
+}
 .ab .play .ico{width:0;height:0;border-style:solid;border-width:6px 0 6px 10px;border-color:transparent transparent transparent currentColor}
 .ab .play[aria-pressed="true"]{background:transparent;color:var(--ink);border-color:var(--ink)}
 .ab .play[aria-pressed="true"] .ico{width:10px;height:12px;border:0;border-left:3px solid currentColor;border-right:3px solid currentColor;box-sizing:border-box}
@@ -179,8 +189,11 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
       <div class="stage"><canvas id="fx" aria-hidden="true"></canvas></div>
       <div class="ab" role="group" aria-label="聴き比べ">
         <button type="button" id="bPlay" class="play" aria-pressed="false" hidden><span class="ico" aria-hidden="true"></span><span class="lb">再生</span></button>
-        <button type="button" id="bBefore" aria-pressed="true">MIX前</button>
-        <button type="button" id="bAfter" aria-pressed="false">MIX後</button>
+        <span class="seg">
+          <button type="button" id="bBefore" aria-pressed="true">MIX前</button>
+          <button type="button" id="bAfter" aria-pressed="false">MIX後</button>
+          <button type="button" id="bMaster" aria-pressed="false">マスタリング後</button>
+        </span>
         <span class="time" id="tm" hidden>0:00 / 0:00</span>
         <small id="audioNote">サンプル音源は準備中です。</small>
       </div>
@@ -245,7 +258,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 <!-- PRO -->
 <section class="view wrap page" id="v-pro">
   <h2>料金と仕様</h2>
-  <p class="intro">補正・ノイズ処理・ハモリ作成（2声まで）・マスタリングは全プランに含まれます。</p>
+  <p class="intro">補正・ノイズ処理・ハモリ（1声まで）・マスタリングは全プランに含まれます。</p>
 
   <div class="tbl"><table class="plans">
     <thead><tr><th>プラン</th><th>料金</th><th>尺</th><th>納期</th><th>無料修正</th></tr></thead>
@@ -262,7 +275,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
   <div class="tbl"><table><tbody>
     <tr><td>トラック追加（4本目以降）</td><td class="n">+¥2,000／本</td></tr>
     <tr><td>特急（通常納期の約半分）</td><td class="n">+¥3,000〜5,000</td></tr>
-    <tr><td>ハモリ追加（3声目以降）</td><td class="n">+¥1,500〜</td></tr>
+    <tr><td>ハモリ追加（2声目以降）</td><td class="n">+¥1,500〜</td></tr>
     <tr><td>Studio冬桜がハモリで参加</td><td class="n">+¥4,000〜6,000</td></tr>
     <tr><td>Xでの紹介</td><td class="n">+¥2,000</td></tr>
     <tr><td>動画用エンコード強化</td><td class="n">+¥1,000〜2,000</td></tr>
@@ -339,11 +352,11 @@ show();
    読めない間は描画した波形で、再生位置の線がゆっくり流れる */
 const cv = document.getElementById('fx'), cx = cv.getContext('2d');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let W=0,H=0,DPR=1,B=[],isAfter=false,mix=0,raf=0,t0=performance.now();
+let W=0,H=0,DPR=1,B=[],mode=0,mix=0,raf=0,t0=performance.now();
 function rnd(i){ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
 
-/* 音源（Web Audio API）。2つを同時に鳴らし、音量だけ切り替えるので位置がずれない */
-const AU = {ctx:null, buf:[null,null], peaks:null, src:[], gain:[], playing:false, startAt:0, offset:0};
+/* 音源（Web Audio API）。MIX前・MIX後・マスタリング後を同時に鳴らし、音量だけ切り替えるので位置がずれない */
+const AU = {ctx:null, buf:[null,null,null], peaks:null, src:[], gain:[], playing:false, startAt:0, offset:0};
 function peaksOf(buf, n){
   const d=buf.getChannelData(0), step=d.length/n, out=new Float32Array(n);
   for(let i=0;i<n;i++){
@@ -357,18 +370,18 @@ function build(){
   const r = cv.getBoundingClientRect(); W=r.width; H=r.height; DPR=Math.min(window.devicePixelRatio||1,2);
   cv.width=W*DPR; cv.height=H*DPR;
   const pad=Math.max(28,W*0.08), n=Math.max(48,Math.floor((W-pad*2)/4));
-  let pb=null, pa=null, top=1;
+  let pb=null, pa=null, pm=null, top=1;
   if(AU.buf[0]){
-    pb=peaksOf(AU.buf[0],n); pa=peaksOf(AU.buf[1],n);
-    /* 両方を同じ物差しで測る（MIX前の音量差がそのまま見える） */
-    top=0; for(let i=0;i<n;i++) top=Math.max(top,pb[i],pa[i]);
+    pb=peaksOf(AU.buf[0],n); pa=peaksOf(AU.buf[1],n); pm=AU.buf[2]?peaksOf(AU.buf[2],n):null;
+    /* 全部を同じ物差しで測る（音量差・音圧の差がそのまま見える） */
+    top=0; for(let i=0;i<n;i++) top=Math.max(top,pb[i],pa[i],pm?pm[i]:0);
   }
   const old=B; B=[];
   for(let i=0;i<n;i++){
     const u=i/(n-1);
-    let clean, rough;
+    let clean, rough, master;
     if(pb){
-      rough=Math.max(0.012, pb[i]/top); clean=Math.max(0.012, pa[i]/top);
+      rough=Math.max(0.012, pb[i]/top); clean=Math.max(0.012, pa[i]/top); master=pm?Math.max(0.012, pm[i]/top):clean;
     }else{
       /* 歌のフレーズ：4つの塊と、その間の息継ぎ */
       const ph=(u*4)%1, gap = ph>0.86 ? Math.max(0,1-(ph-0.86)/0.06) * (ph>0.92?0:1) : 1;
@@ -378,17 +391,18 @@ function build(){
       const spike = rnd(i+900)<0.12 ? 1.0 : 0.25+0.55*rnd(i+500);
       rough = phrase>0.02 ? Math.min(1, body*spike*phrase*1.25) : 0.04+0.05*rnd(i+77);
     }
+    if(!pb) master = clean>0.03 ? Math.min(1, 0.42+clean*0.6) : clean;
     const prev = old.length ? old[Math.round(u*(old.length-1))].h : 0;
-    B.push({x:pad+u*(W-pad*2), u, clean, rough, h:prev});
+    B.push({x:pad+u*(W-pad*2), u, lv:[rough,clean,master], h:prev});
   }
 }
 function pos(){ return AU.playing ? AU.offset + AU.ctx.currentTime - AU.startAt : AU.offset; }
 function dur(){ return AU.buf[0] ? AU.buf[0].duration : 0; }
 function frame(now){
   const t=(now-t0)/1000;
-  mix += ((isAfter?1:0)-mix)*(reduce?1:0.07);
+  mix += (mode-mix)*(reduce?1:0.07);
   cx.setTransform(DPR,0,0,DPR,0,0); cx.clearRect(0,0,W,H);
-  const cy=H/2, maxH=H*0.40;
+  const cy=H/2, maxH=H*0.44;
   let play;
   if(AU.buf[0]){
     if(AU.playing && pos()>=dur()) stopAudio(true);
@@ -396,10 +410,11 @@ function frame(now){
     updTime();
   } else play = reduce ? -1 : (t*0.06)%1.15;
   for(const b of B){
-    const target=(b.rough+(b.clean-b.rough)*mix)*maxH;
+    const k=Math.min(1,Math.floor(mix)), f=mix-k;
+    const target=(b.lv[k]+(b.lv[k+1]-b.lv[k])*f)*maxH;
     b.h += (target-b.h)*(reduce?1:0.12);
     const played = b.u < play;
-    const lum = played ? Math.round(120+mix*120) : Math.round(70+mix*50);
+    const m=mix/2, lum = played ? Math.round(120+m*120) : Math.round(70+m*55);
     cx.fillStyle='rgb('+lum+','+(lum+2)+','+(lum+4)+')';
     cx.fillRect(b.x-1, cy-b.h-0.5, 2, b.h*2+1);
   }
@@ -412,21 +427,24 @@ function fit(){ if(!document.getElementById('v-top').classList.contains('on')) r
 window.addEventListener('resize', fit);
 window.addEventListener('hashchange', ()=>{ if(location.hash.replace('#','')!=='top' && AU.playing) stopAudio(false); setTimeout(fit,0); });
 
-const bB = document.getElementById('bBefore'), bA = document.getElementById('bAfter');
+const bB = document.getElementById('bBefore'), bA = document.getElementById('bAfter'), bM = document.getElementById('bMaster');
+const modeBtns=[bB,bA,bM];
 const bP = document.getElementById('bPlay'), tm = document.getElementById('tm');
 const mmss = s => Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
 function updTime(){ tm.textContent = mmss(Math.min(pos(),dur()))+' / '+mmss(dur()); }
 function setGains(){
   if(!AU.gain.length) return;
   const now=AU.ctx.currentTime;
-  AU.gain.forEach((g,i)=>{ g.gain.cancelScheduledValues(now); g.gain.setTargetAtTime((i===1)===isAfter?1:0, now, 0.015); });
+  AU.gain.forEach((g,i)=>{ if(!g) return; g.gain.cancelScheduledValues(now); g.gain.setTargetAtTime(i===mode?1:0, now, 0.015); });
 }
 function startAudio(){
   const c=AU.ctx; if(c.state==='suspended') c.resume();
   if(AU.offset>=dur()) AU.offset=0;
-  AU.gain=[0,1].map(i=>{ const g=c.createGain(); g.gain.value=(i===1)===isAfter?1:0; g.connect(c.destination); return g; });
+  const ids=AU.buf.map((b,i)=>i).filter(i=>AU.buf[i]);
+  AU.gain=[]; AU.src=[];
+  ids.forEach(i=>{ const g=c.createGain(); g.gain.value=i===mode?1:0; g.connect(c.destination); AU.gain[i]=g; });
   AU.startAt=c.currentTime+0.03;
-  AU.src=[0,1].map(i=>{ const s=c.createBufferSource(); s.buffer=AU.buf[i]; s.connect(AU.gain[i]); s.start(AU.startAt, AU.offset); return s; });
+  AU.src=ids.map(i=>{ const s=c.createBufferSource(); s.buffer=AU.buf[i]; s.connect(AU.gain[i]); s.start(AU.startAt, AU.offset); return s; });
   AU.playing=true; bP.setAttribute('aria-pressed','true'); bP.querySelector('.lb').textContent='停止';
   kick();
 }
@@ -437,15 +455,18 @@ function stopAudio(ended){
   kick();
 }
 bP.addEventListener('click',()=>{ if(!AU.buf[0]) return; AU.playing ? stopAudio(false) : startAudio(); });
-function pick(after){
-  isAfter = after;
-  bB.setAttribute('aria-pressed', !after); bA.setAttribute('aria-pressed', after);
+let touched=false;
+function pick(m, auto){
+  if(auto && touched) return;
+  if(!auto) touched=true;
+  if(m===2 && AU.buf[0] && !AU.buf[2]) m=1;
+  mode = m;
+  modeBtns.forEach((b,i)=>b.setAttribute('aria-pressed', i===m));
   setGains(); kick();
 }
-bB.addEventListener('click',()=>pick(false));
-bA.addEventListener('click',()=>pick(true));
+modeBtns.forEach((b,i)=>b.addEventListener('click',()=>pick(i)));
 
-/* 音源の読み込み：before.mp3 / after.mp3 を優先し、無ければ .m4a（仮音源）を使う */
+/* 音源の読み込み：before / after / master の .mp3 を優先し、無ければ .m4a（仮音源）を使う */
 async function loadOne(name){
   for(const ext of ['mp3','m4a']){
     try{ const r=await fetch('audio/'+name+'.'+ext); if(r.ok) return await r.arrayBuffer(); }catch(e){}
@@ -455,17 +476,20 @@ async function loadOne(name){
 (async()=>{
   try{
     const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
-    const raw=await Promise.all([loadOne('before'),loadOne('after')]);
+    const raw=await Promise.all([loadOne('before'),loadOne('after'),loadOne('master').catch(()=>null)]);
     const ctx=new AC();
-    const dec=b=>new Promise((ok,ng)=>ctx.decodeAudioData(b,ok,ng));
+    const dec=b=>b?new Promise((ok,ng)=>ctx.decodeAudioData(b,ok,ng)):null;
     AU.buf=await Promise.all(raw.map(dec)); AU.ctx=ctx;
+    if(!AU.buf[2]){ bM.hidden=true; if(mode===2) pick(1,true); }
     document.getElementById('audioNote').textContent='';
     bP.hidden=false; tm.hidden=false; updTime();
     fit();
   }catch(e){ /* 音源が無い・読めないときは描画した波形のまま */ }
 })();
 fit();
-setTimeout(()=>pick(true), reduce?0:1100);
+/* 最初に MIX前 → MIX後 → マスタリング後 と順に変化を見せる */
+setTimeout(()=>pick(1,true), reduce?0:1100);
+setTimeout(()=>pick(2,true), reduce?0:2900);
 setTimeout(()=>document.body.classList.remove('intro'), 2600);
 
 /* quiz */

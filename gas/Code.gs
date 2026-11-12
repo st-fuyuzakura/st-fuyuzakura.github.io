@@ -188,7 +188,7 @@ function filesLine_(files) {
 function mailFixed_(r) {
   return [
     head_(r.name), '以下の内容でご依頼を受け付けました。', '', summary_(r),
-    `金額：${r.price}（税込・ボーカル3トラックまで。補正・ノイズ処理・ハモリ作成・マスタリング込み）`,
+    `金額：${r.price}（税込・ボーカル3トラックまで。補正・ノイズ処理・ハモリ1声・マスタリング込み）`,
     `納期の目安：素材受け取りから ${r.days}`, '',
     '■ 素材について', filesLine_(r.files), '',
     '■ お支払いについて', CONFIG.PAYMENT_TEXT, 'ご入金を確認でき次第、制作に取りかかり、着手のご連絡をお送りします。',
