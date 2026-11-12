@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Archivo:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#9299A1;--line:#272A2F;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark;
+  --bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#AEB4BB;--line:#30343A;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark;
   --serif:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',serif;
   --jp:'Zen Kaku Gothic New','Hiragino Sans','Yu Gothic',sans-serif;
   --num:'Archivo','Zen Kaku Gothic New',sans-serif;
@@ -17,12 +17,12 @@
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#9299A1;--line:#272A2F;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#9299A1;--line:#272A2F;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#AEB4BB;--line:#30343A;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#AEB4BB;--line:#30343A;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark}
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 html,body{overflow-x:clip}
-body{overflow-wrap:anywhere;margin:0;background:var(--bg);color:var(--ink);font-family:var(--jp);line-height:1.8;-webkit-font-smoothing:antialiased}
+body{overflow-wrap:anywhere;margin:0;background:var(--bg);color:var(--ink);font-family:var(--jp);font-size:16px;line-height:1.85;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
@@ -30,7 +30,10 @@ button,input,select,textarea{font:inherit;color:inherit}
 header{display:flex;justify-content:space-between;align-items:center;max-width:880px;margin:0 auto;padding:20px clamp(28px,8vw,48px);position:relative;z-index:2}
 .logo{font-family:var(--serif);font-weight:600;letter-spacing:.1em;text-decoration:none;font-size:18px;display:inline-flex;align-items:center;gap:8px;min-height:44px}
 .logo svg{width:20px;height:20px;fill:var(--sakura)}
-.back{background:none;border:0;color:var(--sub);cursor:pointer;padding:12px 0;min-height:44px;font-size:14px}
+.back{display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--line);color:var(--ink);cursor:pointer;padding:8px 16px;min-height:44px;font-size:14px;border-radius:999px;transition:border-color .2s}
+.back:hover{border-color:var(--ink)}
+.back[hidden]{display:none}
+.back-foot{margin-top:72px}
 .view{display:none}
 .view.on{display:block}
 
@@ -42,8 +45,8 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:8
 .branch .st circle{fill:var(--sub)}
 .hero h1{font-family:var(--serif);font-size:clamp(27px,6.6vw,60px);line-height:1.45;font-weight:600;margin:0 0 20px;letter-spacing:.02em}
 .hero p.lead{color:var(--sub);margin:0 0 40px;max-width:24em;font-size:15px}
-.player{padding:0 0 8px;margin-bottom:28px}
-.stage{position:relative;height:min(34svh,320px);margin:0 calc(-1 * clamp(28px,8vw,48px))}
+.player{padding:0 0 8px;margin:8px 0 48px}
+.stage{position:relative;height:clamp(110px,17svh,170px);margin:0 calc(-1 * clamp(28px,8vw,48px))}
 .stage canvas{display:block;width:100%;height:100%;}
 .hero h1 .l{display:block;overflow:hidden}
 .hero h1 .l>span{display:block}
@@ -71,20 +74,23 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:8
 .ab .play[aria-pressed="true"]{background:transparent;color:var(--ink);border-color:var(--ink)}
 .ab .play[aria-pressed="true"] .ico{width:10px;height:12px;border:0;border-left:3px solid currentColor;border-right:3px solid currentColor;box-sizing:border-box}
 .ab .time{font-family:var(--num,inherit);font-size:12px;color:var(--sub);margin-left:auto;font-variant-numeric:tabular-nums;letter-spacing:.04em}
-.doors{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.door{display:block;text-align:left;border:1px solid var(--line);background:var(--panel);padding:20px 22px;cursor:pointer;border-radius:2px}
-.door:hover{border-color:var(--ink)}
-.door b{display:block;font-size:17px;margin-bottom:4px}
+.doors{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.door{display:grid;grid-template-columns:auto 1fr auto;align-items:center;column-gap:16px;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:22px 4px;cursor:pointer;border-radius:0}
+.door+.door{border-left:1px solid var(--line);padding-left:24px}
+.door i{font-style:normal;font-family:var(--num);font-size:12px;color:var(--sub);letter-spacing:.08em;align-self:start;padding-top:5px}
+.door b{display:block;font-size:17px;margin-bottom:2px}
 .door span{color:var(--sub);font-size:13px;line-height:1.6;display:block}
-.door.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.door.main span{color:inherit;opacity:.85}
-@media(max-width:620px){.doors{grid-template-columns:1fr}}
+.door .ar{font-family:var(--num);font-size:18px;color:var(--sub);transition:transform .3s,color .3s}
+.door:hover .ar,.door:focus-visible .ar{transform:translateX(4px);color:var(--ink)}
+.door.main .ar{color:var(--ink)}
+@media(max-width:620px){.doors{grid-template-columns:1fr}.door+.door{border-left:0;padding-left:4px}}
 
 /* shared */
 .page{padding-top:24px;padding-bottom:96px}
 .page h2{font-family:var(--serif);font-weight:600;font-size:clamp(22px,5.2vw,36px);margin:8px 0 12px;line-height:1.45;letter-spacing:.02em}
 .page .intro{color:var(--sub);margin:0 0 40px}
-h3{font-size:18px;margin:56px 0 16px}
+h3{font-size:18px;margin:72px 0 20px;display:flex;align-items:baseline;gap:14px;padding-top:20px;border-top:1px solid var(--ink)}
+h3 i{font-style:normal;font-family:var(--num);font-size:12px;color:var(--sub);letter-spacing:.1em;font-weight:500}
 .cta{display:inline-block;background:var(--accent);color:var(--accent-ink);border:0;padding:16px 28px;min-height:52px;font-weight:700;cursor:pointer;border-radius:2px;text-decoration:none}
 
 /* quiz */
@@ -105,7 +111,12 @@ h3{font-size:18px;margin:56px 0 16px}
 .steps li::before{content:counter(s);font-family:var(--num);font-size:22px;color:var(--accent)}
 .steps b{display:block}
 .steps span{color:var(--sub);font-size:14px}
-.tips p{margin:0 0 12px;color:var(--sub)}
+.tips{margin-top:40px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tips summary{cursor:pointer;padding:18px 0;font-weight:700;list-style:none;display:flex;justify-content:space-between}
+.tips summary::-webkit-details-marker{display:none}
+.tips summary::after{content:"＋";color:var(--sub)}
+.tips[open] summary::after{content:"−"}
+.tips p{margin:0 0 14px;color:var(--sub)}
 
 /* pro */
 table{width:100%;border-collapse:collapse;font-size:15px}
@@ -157,7 +168,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="pt" d="M0 -3C-10 -8 -12 -22 -4 -31L0 -26L4 -31C12 -22 10 -8 0 -3Z"/><linearGradient id="gp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9DCE0"/><stop offset="1" stop-color="#2E3237"/></linearGradient><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0A0B0D"/><stop offset="1" stop-color="#6A7078"/></linearGradient></defs></svg>
 <header>
   <a class="logo" href="#top"><svg viewBox="-34 -34 68 68" aria-hidden="true"><use href="#pt"/><use href="#pt" transform="rotate(72)"/><use href="#pt" transform="rotate(144)"/><use href="#pt" transform="rotate(216)"/><use href="#pt" transform="rotate(288)"/></svg>Studio冬桜</a>
-  <button class="back" id="backBtn" type="button" hidden>トップへ戻る</button>
+  <button class="back" id="backBtn" type="button" hidden><span aria-hidden="true">←</span>トップへ</button>
 </header>
 
 <main>
@@ -179,8 +190,8 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     <p class="lead">歌ってみたのボーカルMIX。録った素材を送るだけで、補正からマスタリングまで仕上げます。</p>
 
     <div class="doors">
-      <button class="door main" type="button" data-go="beginner"><b>はじめて依頼する</b><span>3つの質問でぴったりのプランがわかります</span></button>
-      <button class="door" type="button" data-go="pro"><b>料金・仕様を見る</b><span>依頼に慣れている方はこちら</span></button>
+      <button class="door main" type="button" data-go="beginner"><i>01</i><div><b>はじめて依頼する</b><span>3つの質問でプランがわかります</span></div><span class="ar" aria-hidden="true">→</span></button>
+      <button class="door" type="button" data-go="pro"><i>02</i><div><b>料金・仕様を見る</b><span>依頼に慣れている方はこちら</span></div><span class="ar" aria-hidden="true">→</span></button>
     </div>
   </div>
 </section>
@@ -214,7 +225,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     <button class="cta" type="button" id="toOrderFromQuiz">このプランで依頼する</button>
   </div>
 
-  <h3>依頼の流れ</h3>
+  <h3><i>01</i>依頼の流れ</h3>
   <ol class="steps">
     <li><div><b>フォームを送る</b><span>素材はまだなくても大丈夫です。</span></div></li>
     <li><div><b>金額と納期のご連絡</b><span>24時間以内にメールでお送りします。</span></div></li>
@@ -223,12 +234,12 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     <li><div><b>完成データを受け取る</b><span>動画にそのまま使える形でお渡しします。</span></div></li>
   </ol>
 
-  <h3>録音で気をつけること</h3>
-  <div class="tips">
+  <details class="tips"><summary>録音で気をつけること</summary>
     <p>エアコンや換気扇は止めて、静かな部屋で録ってください。</p>
     <p>伴奏はイヤホンやヘッドホンで聴き、マイクに入らないようにします。</p>
     <p>音量は大きすぎず、一番大きな声で割れない程度に。迷ったら一度短く録って送ってもらえれば確認します。</p>
-  </div>
+  </details>
+  <p class="back-foot"><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
 </section>
 
 <!-- PRO -->
@@ -247,7 +258,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
   </table></div>
   <p class="note">各プランともボーカル3トラックまで（Instは含みません）。</p>
 
-  <h3>オプション</h3>
+  <h3><i>01</i>オプション</h3>
   <div class="tbl"><table><tbody>
     <tr><td>トラック追加（4本目以降）</td><td class="n">+¥2,000／本</td></tr>
     <tr><td>特急（通常納期の約半分）</td><td class="n">+¥3,000〜5,000</td></tr>
@@ -259,7 +270,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     <tr><td>2曲セット／3曲セット</td><td class="n">¥27,000〜／¥39,000〜</td></tr>
   </tbody></table></div>
 
-  <h3>素材と納品</h3>
+  <h3><i>02</i>素材と納品</h3>
   <dl class="spec">
     <dt>受け取り形式</dt><dd>WAV（48kHz / 24bit 推奨、44.1kHz可）</dd>
     <dt>トラック</dt><dd>パートごとに頭をそろえて書き出し、エフェクトなし</dd>
@@ -268,6 +279,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     <dt>キャンセル</dt><dd>［キャンセル規定：仮］</dd>
   </dl>
   <p style="margin-top:40px"><button class="cta" type="button" data-go="order">依頼フォームへ</button></p>
+  <p class="back-foot"><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
 </section>
 
 <!-- ORDER -->
