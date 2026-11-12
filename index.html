@@ -172,6 +172,28 @@ input,select,textarea{font-size:16px}
 .done{padding:48px 0}
 footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-size:13px;text-align:center}
 
+/* menu card */
+.menu{margin:24px 0 96px}
+.menu-card{position:relative;border:1px solid var(--line);padding:clamp(24px,5vw,44px);background:linear-gradient(180deg,var(--panel),var(--bg));overflow:hidden}
+.menu-card::before{content:"";position:absolute;inset:8px;border:1px solid var(--line);pointer-events:none;opacity:.6}
+.menu-head{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+.menu-head svg{width:34px;height:34px;fill:var(--sakura);flex:none}
+.menu-en{margin:0;font-family:var(--num);font-size:11px;letter-spacing:.28em;color:var(--sub)}
+.menu-head h2{margin:2px 0 0;font-family:var(--serif);font-weight:600;font-size:clamp(20px,4.6vw,28px);letter-spacing:.06em}
+.menu-list{list-style:none;margin:0;padding:0}
+.menu-list li{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.menu-list li:first-child{border-top:1px solid var(--ink)}
+.mn{font-weight:700;font-size:17px}
+.md{color:var(--sub);font-size:13px}
+.mp{font-family:var(--num);font-weight:600;font-size:clamp(22px,5vw,28px);letter-spacing:.02em}
+.mp::before{content:"¥";font-size:.6em;margin-right:2px;color:var(--sub)}
+.menu-inc{margin:18px 0 22px;font-size:13px;color:var(--sub);line-height:1.8}
+.menu-opt{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.menu-opt li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.menu-opt li span:last-child{font-family:var(--num);color:var(--sub)}
+.menu-foot{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-size:12px;color:var(--sub)}
+.menu-more{background:none;border:0;color:var(--ink);font-size:14px;cursor:pointer;padding:10px 0;min-height:44px;text-decoration:underline;text-underline-offset:4px}
+@media(max-width:620px){.menu-opt{grid-template-columns:1fr}.menu-list li{grid-template-columns:1fr auto}.md{grid-row:2;grid-column:1;margin-top:-6px}}
 </style>
 </head>
 <body class="intro">
@@ -207,6 +229,29 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
       <button class="door" type="button" data-go="pro"><i>02</i><div><b>料金・仕様を見る</b><span>依頼に慣れている方はこちら</span></div><span class="ar" aria-hidden="true">→</span></button>
     </div>
   </div>
+
+  <section class="menu" aria-labelledby="menuTtl">
+    <div class="menu-card">
+      <div class="menu-head">
+        <svg viewBox="-34 -34 68 68" aria-hidden="true"><use href="#pt"/><use href="#pt" transform="rotate(72)"/><use href="#pt" transform="rotate(144)"/><use href="#pt" transform="rotate(216)"/><use href="#pt" transform="rotate(288)"/></svg>
+        <div><p class="menu-en">VOCAL MIX MENU</p><h2 id="menuTtl">Studio冬桜 料金表</h2></div>
+      </div>
+      <ul class="menu-list">
+        <li><span class="mn">ショート</span><span class="md">30秒以内</span><span class="mp">6,500</span></li>
+        <li><span class="mn">ワンコーラス</span><span class="md">1番程度</span><span class="mp">10,500</span></li>
+        <li><span class="mn">スタンダード</span><span class="md">フル</span><span class="mp">15,000</span></li>
+        <li><span class="mn">プレミアム</span><span class="md">フル・丁寧仕上げ</span><span class="mp">20,000</span></li>
+      </ul>
+      <p class="menu-inc">全プラン込み：ピッチ・タイミング補正／ノイズ処理／ハモリ1声／マスタリング（ボーカル3トラックまで）</p>
+      <ul class="menu-opt">
+        <li><span>トラック追加</span><span>+2,000／本</span></li>
+        <li><span>ハモリ追加</span><span>+1,500〜</span></li>
+        <li><span>特急</span><span>+3,000〜</span></li>
+        <li><span>修正追加</span><span>+1,500／回</span></li>
+      </ul>
+      <div class="menu-foot"><span>税込・円</span><button type="button" class="menu-more" data-go="pro">くわしい料金・仕様 →</button></div>
+    </div>
+  </section>
 </section>
 
 <!-- BEGINNER -->
