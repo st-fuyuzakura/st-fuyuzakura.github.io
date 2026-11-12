@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Studio冬桜 | 歌ってみたMIX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Archivo:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#9299A1;--line:#272A2F;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark;
+  --serif:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',serif;
+  --jp:'Zen Kaku Gothic New','Hiragino Sans','Yu Gothic',sans-serif;
+  --num:'Archivo','Zen Kaku Gothic New',sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#9299A1;--line:#272A2F;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#9299A1;--line:#272A2F;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{overflow-x:clip}
+body{overflow-wrap:anywhere;margin:0;background:var(--bg);color:var(--ink);font-family:var(--jp);line-height:1.8;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:880px;margin:0 auto;padding:0 clamp(28px,8vw,48px)}
+header{display:flex;justify-content:space-between;align-items:center;max-width:880px;margin:0 auto;padding:20px clamp(28px,8vw,48px);position:relative;z-index:2}
+.logo{font-family:var(--serif);font-weight:600;letter-spacing:.1em;text-decoration:none;font-size:18px;display:inline-flex;align-items:center;gap:8px;min-height:44px}
+.logo svg{width:20px;height:20px;fill:var(--sakura)}
+.back{background:none;border:0;color:var(--sub);cursor:pointer;padding:12px 0;min-height:44px;font-size:14px}
+.view{display:none}
+.view.on{display:block}
+
+/* top */
+.hero{position:relative;display:flex;flex-direction:column;padding-bottom:56px}
+.hero>*{position:relative;z-index:1}
+.branch{position:absolute!important;z-index:0!important;top:-64px;right:calc(-1 * clamp(28px,8vw,48px));width:min(62vw,420px);height:auto;pointer-events:none}
+.branch .ln line{stroke:var(--sub);stroke-width:.7;opacity:.8}
+.branch .st circle{fill:var(--sub)}
+.hero h1{font-family:var(--serif);font-size:clamp(27px,6.6vw,60px);line-height:1.45;font-weight:600;margin:0 0 20px;letter-spacing:.02em}
+.hero p.lead{color:var(--sub);margin:0 0 40px;max-width:24em;font-size:15px}
+.player{padding:0 0 8px;margin-bottom:28px}
+.stage{position:relative;height:min(34svh,320px);margin:0 calc(-1 * clamp(28px,8vw,48px))}
+.stage canvas{display:block;width:100%;height:100%;}
+.hero h1 .l{display:block;overflow:hidden}
+.hero h1 .l>span{display:block}
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes viewIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:no-preference){
+  .intro .hero h1 .l>span{animation:rise .9s cubic-bezier(.2,.8,.2,1) both .35s}
+  .intro .hero h1 .l:nth-child(2)>span{animation-delay:.5s}
+  .intro .hero .lead,.intro .hero .ab{animation:fadeUp .8s both .9s}
+  .intro .hero .doors{animation:fadeUp .8s both 1.15s}
+  .view.on.page{animation:viewIn .5s cubic-bezier(.2,.8,.2,1) both}
+  .result:not([hidden]){animation:viewIn .5s cubic-bezier(.2,.8,.2,1) both}
+  .door{transition:border-color .3s,transform .3s}
+  .door:active{transform:scale(.985)}
+}
+.ab{display:flex;gap:8px;margin-top:4px;align-items:center;flex-wrap:wrap}
+.ab button{border:1px solid var(--line);background:transparent;padding:10px 16px;font-size:14px;min-height:44px;cursor:pointer;border-radius:2px}
+.ab button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ab small{color:var(--sub);flex-basis:100%;font-size:12px}
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.door{display:block;text-align:left;border:1px solid var(--line);background:var(--panel);padding:20px 22px;cursor:pointer;border-radius:2px}
+.door:hover{border-color:var(--ink)}
+.door b{display:block;font-size:17px;margin-bottom:4px}
+.door span{color:var(--sub);font-size:13px;line-height:1.6;display:block}
+.door.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.door.main span{color:inherit;opacity:.85}
+@media(max-width:620px){.doors{grid-template-columns:1fr}}
+
+/* shared */
+.page{padding-top:24px;padding-bottom:96px}
+.page h2{font-family:var(--serif);font-weight:600;font-size:clamp(22px,5.2vw,36px);margin:8px 0 12px;line-height:1.45;letter-spacing:.02em}
+.page .intro{color:var(--sub);margin:0 0 40px}
+h3{font-size:18px;margin:56px 0 16px}
+.cta{display:inline-block;background:var(--accent);color:var(--accent-ink);border:0;padding:16px 28px;min-height:52px;font-weight:700;cursor:pointer;border-radius:2px;text-decoration:none}
+
+/* quiz */
+.q{border-top:1px solid var(--line);padding:28px 0}
+.q legend{font-weight:700;font-size:16px;padding:0;margin-bottom:14px}
+.q fieldset{border:0;padding:0;margin:0}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{border:1px solid var(--line);font-size:14px;padding:10px 16px;min-height:48px;display:flex;align-items:center;cursor:pointer;border-radius:2px;background:var(--panel)}
+.opts input{position:absolute;opacity:0;pointer-events:none}
+.opts input:checked+span{font-weight:700}
+.opts label:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opts label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.result{margin-top:16px;padding:32px;background:var(--panel);border:1px solid var(--line)}
+.result .price{font-family:var(--num);font-size:44px;font-weight:600;line-height:1.1;margin:8px 0}
+.result p{color:var(--sub);margin:0 0 24px}
+.steps{list-style:none;padding:0;margin:0;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:12px;padding:16px 0;border-top:1px solid var(--line)}
+.steps li::before{content:counter(s);font-family:var(--num);font-size:22px;color:var(--accent)}
+.steps b{display:block}
+.steps span{color:var(--sub);font-size:14px}
+.tips p{margin:0 0 12px;color:var(--sub)}
+
+/* pro */
+table{width:100%;border-collapse:collapse;font-size:15px}
+.tbl{overflow-x:auto}
+th,td{text-align:left;padding:14px 12px 14px 0;border-bottom:1px solid var(--line)}
+td.n{white-space:nowrap;text-align:right;padding-right:0}
+.plans td.n{text-align:left}
+th{font-weight:500;color:var(--sub);font-size:13px}
+td.n{font-family:var(--num);font-weight:600}
+.note{color:var(--sub);font-size:14px;margin-top:12px}
+dl.spec{display:grid;grid-template-columns:auto 1fr;gap:0;margin:0}
+dl.spec dt,dl.spec dd{padding:12px 0;border-bottom:1px solid var(--line);margin:0}
+dl.spec dt{color:var(--sub);padding-right:24px;font-size:14px}
+@media(max-width:620px){
+  .plans thead{display:none}
+  .plans tr{display:grid;grid-template-columns:1fr auto;column-gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .plans td{border:0;padding:0}
+  .plans td:nth-child(1){font-weight:700}
+  .plans td:nth-child(2){text-align:right;font-size:18px}
+  .plans td:nth-child(n+3){grid-column:1/-1;color:var(--sub);font-size:14px}
+  .plans td[data-l]::before{content:attr(data-l)"："}
+  dl.spec{grid-template-columns:1fr}
+  dl.spec dt{border-bottom:0;padding:12px 0 0}
+  dl.spec dd{padding:2px 0 12px}
+  .result{padding:24px 20px}
+  .result .price{font-size:36px}
+  .hero{padding:0 0 56px}
+  .opts{flex-direction:column}
+  .cta{width:100%;text-align:center}
+  table{font-size:14px}
+}
+
+/* form */
+form{display:grid;gap:22px;max-width:520px}
+.f{display:grid;gap:6px}
+.f label{font-size:14px;font-weight:500}
+.f label em{font-style:normal;color:var(--sub);font-weight:400;margin-left:6px;font-size:12px}
+input,select,textarea{font-size:16px}
+.f input,.f select,.f textarea{background:var(--panel);border:1px solid var(--line);padding:12px 14px;min-height:48px;border-radius:2px;width:100%}
+.f textarea{min-height:110px;resize:vertical}
+.err{color:#F2B8B5;font-size:13px;min-height:1em}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .err{color:#F2B8B5}}
+.done{padding:48px 0}
+footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-size:13px;text-align:center}
+
+</style>
+</head>
+<body class="intro">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="pt" d="M0 -3C-10 -8 -12 -22 -4 -31L0 -26L4 -31C12 -22 10 -8 0 -3Z"/><linearGradient id="gp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9DCE0"/><stop offset="1" stop-color="#2E3237"/></linearGradient><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0A0B0D"/><stop offset="1" stop-color="#6A7078"/></linearGradient></defs></svg>
+<header>
+  <a class="logo" href="#top"><svg viewBox="-34 -34 68 68" aria-hidden="true"><use href="#pt"/><use href="#pt" transform="rotate(72)"/><use href="#pt" transform="rotate(144)"/><use href="#pt" transform="rotate(216)"/><use href="#pt" transform="rotate(288)"/></svg>Studio冬桜</a>
+  <button class="back" id="backBtn" type="button" hidden>トップへ戻る</button>
+</header>
+
+<main>
+<!-- TOP -->
+<section class="view wrap" id="v-top">
+  <div class="hero">
+        <div class="player" id="player">
+      <div class="stage"><canvas id="fx" aria-hidden="true"></canvas></div>
+      <div class="ab" role="group" aria-label="聴き比べ">
+        <button type="button" id="bBefore" aria-pressed="true">MIX前</button>
+        <button type="button" id="bAfter" aria-pressed="false">MIX後</button>
+        <small id="audioNote">サンプル音源は準備中です。</small>
+      </div>
+      <audio id="aBefore" preload="none" src=""></audio>
+      <audio id="aAfter" preload="none" src=""></audio>
+    </div>
+
+    <h1><span class="l"><span>その歌声、</span></span><span class="l"><span>ちゃんと届く音に。</span></span></h1>
+    <p class="lead">歌ってみたのボーカルMIX。録った素材を送るだけで、補正からマスタリングまで仕上げます。</p>
+
+    <div class="doors">
+      <button class="door main" type="button" data-go="beginner"><b>はじめて依頼する</b><span>3つの質問でぴったりのプランがわかります</span></button>
+      <button class="door" type="button" data-go="pro"><b>料金・仕様を見る</b><span>依頼に慣れている方はこちら</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- BEGINNER -->
+<section class="view wrap page" id="v-beginner">
+  <h2>3つ答えるだけで、<br>プランが決まります。</h2>
+  <p class="intro">わからなければ「わからない」でOK。あとから相談できます。</p>
+
+  <div class="q"><fieldset><legend>どのくらいの長さを歌いましたか？</legend><div class="opts" id="q1">
+    <label><input type="radio" name="len" value="short"><span>30秒くらい（サビだけ等）</span></label>
+    <label><input type="radio" name="len" value="one"><span>1番だけ</span></label>
+    <label><input type="radio" name="len" value="full"><span>フルで1曲</span></label>
+    <label><input type="radio" name="len" value="unknown"><span>まだ決めていない</span></label>
+  </div></fieldset></div>
+
+  <div class="q"><fieldset><legend>仕上がりへのこだわりは？</legend><div class="opts">
+    <label><input type="radio" name="care" value="std"><span>おまかせで大丈夫</span></label>
+    <label><input type="radio" name="care" value="high"><span>細かく相談しながら詰めたい</span></label>
+  </div></fieldset></div>
+
+  <div class="q"><fieldset><legend>急ぎですか？</legend><div class="opts">
+    <label><input type="radio" name="rush" value="no"><span>いいえ</span></label>
+    <label><input type="radio" name="rush" value="yes"><span>なるべく早くほしい</span></label>
+  </div></fieldset></div>
+
+  <div class="result" id="result" hidden aria-live="polite">
+    <div id="rName" style="font-weight:700"></div>
+    <div class="price" id="rPrice"></div>
+    <p id="rDesc"></p>
+    <button class="cta" type="button" id="toOrderFromQuiz">このプランで依頼する</button>
+  </div>
+
+  <h3>依頼の流れ</h3>
+  <ol class="steps">
+    <li><div><b>フォームを送る</b><span>素材はまだなくても大丈夫です。</span></div></li>
+    <li><div><b>金額と納期のご連絡</b><span>24時間以内にメールでお送りします。</span></div></li>
+    <li><div><b>素材を送ってお支払い</b><span>ファイル共有サービスのリンクを貼るだけです。</span></div></li>
+    <li><div><b>仕上がりを確認</b><span>気になるところは普段の言葉で伝えてください。</span></div></li>
+    <li><div><b>完成データを受け取る</b><span>動画にそのまま使える形でお渡しします。</span></div></li>
+  </ol>
+
+  <h3>録音で気をつけること</h3>
+  <div class="tips">
+    <p>エアコンや換気扇は止めて、静かな部屋で録ってください。</p>
+    <p>伴奏はイヤホンやヘッドホンで聴き、マイクに入らないようにします。</p>
+    <p>音量は大きすぎず、一番大きな声で割れない程度に。迷ったら一度短く録って送ってもらえれば確認します。</p>
+  </div>
+</section>
+
+<!-- PRO -->
+<section class="view wrap page" id="v-pro">
+  <h2>料金と仕様</h2>
+  <p class="intro">補正・ノイズ処理・ハモリ作成（2声まで）・マスタリングは全プランに含まれます。</p>
+
+  <div class="tbl"><table class="plans">
+    <thead><tr><th>プラン</th><th>料金</th><th>尺</th><th>納期</th><th>無料修正</th></tr></thead>
+    <tbody>
+      <tr><td>ショート</td><td class="n">¥6,500</td><td>30秒以内</td><td data-l="納期">3〜5日</td><td data-l="無料修正">1回</td></tr>
+      <tr><td>ワンコーラス</td><td class="n">¥10,500</td><td>1番程度</td><td data-l="納期">5〜7日</td><td data-l="無料修正">1回</td></tr>
+      <tr><td>スタンダード</td><td class="n">¥15,000</td><td>フル</td><td data-l="納期">7〜10日</td><td data-l="無料修正">2回</td></tr>
+      <tr><td>プレミアム</td><td class="n">¥20,000</td><td>フル・丁寧仕上げ</td><td data-l="納期">7〜10日</td><td data-l="無料修正">3〜4回</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">各プランともボーカル3トラックまで（Instは含みません）。</p>
+
+  <h3>オプション</h3>
+  <div class="tbl"><table><tbody>
+    <tr><td>トラック追加（4本目以降）</td><td class="n">+¥2,000／本</td></tr>
+    <tr><td>特急（通常納期の約半分）</td><td class="n">+¥3,000〜5,000</td></tr>
+    <tr><td>ハモリ追加（3声目以降）</td><td class="n">+¥1,500〜</td></tr>
+    <tr><td>Studio冬桜がハモリで参加</td><td class="n">+¥4,000〜6,000</td></tr>
+    <tr><td>Xでの紹介</td><td class="n">+¥2,000</td></tr>
+    <tr><td>動画用エンコード強化</td><td class="n">+¥1,000〜2,000</td></tr>
+    <tr><td>修正回数の追加</td><td class="n">+¥1,500／回</td></tr>
+    <tr><td>2曲セット／3曲セット</td><td class="n">¥27,000〜／¥39,000〜</td></tr>
+  </tbody></table></div>
+
+  <h3>素材と納品</h3>
+  <dl class="spec">
+    <dt>受け取り形式</dt><dd>WAV（48kHz / 24bit 推奨、44.1kHz可）</dd>
+    <dt>トラック</dt><dd>パートごとに頭をそろえて書き出し、エフェクトなし</dd>
+    <dt>納品形式</dt><dd>WAV＋MP3（仮）</dd>
+    <dt>お支払い</dt><dd>［支払い方法：仮］着手前にお支払い</dd>
+    <dt>キャンセル</dt><dd>［キャンセル規定：仮］</dd>
+  </dl>
+  <p style="margin-top:40px"><button class="cta" type="button" data-go="order">依頼フォームへ</button></p>
+</section>
+
+<!-- ORDER -->
+<section class="view wrap page" id="v-order">
+  <div id="formWrap">
+    <h2>依頼フォーム</h2>
+    <p class="intro">必須は4つだけ。送信しただけでは料金は発生しません。</p>
+    <form id="orderForm" novalidate>
+      <div class="f"><label for="name">お名前（活動名）</label><input id="name" name="name" autocomplete="nickname"><div class="err" id="e-name"></div></div>
+      <div class="f"><label for="contact">連絡先メールアドレス</label><input id="contact" name="contact" type="email" autocomplete="email" inputmode="email"><div class="err" id="e-contact"></div></div>
+      <div class="f"><label for="song">曲名</label><input id="song" name="song" placeholder="例：〇〇／原曲URLでも可"><div class="err" id="e-song"></div></div>
+      <div class="f"><label for="plan">プラン</label>
+        <select id="plan" name="plan">
+          <option value="">選んでください</option>
+          <option>相談して決めたい</option>
+          <option>ショート ¥6,500</option>
+          <option>ワンコーラス ¥10,500</option>
+          <option>スタンダード ¥15,000</option>
+          <option>プレミアム ¥20,000</option>
+        </select><div class="err" id="e-plan"></div></div>
+      <div class="f"><label for="x">XのID<em>任意</em></label><input id="x" name="x" placeholder="@"></div>
+      <div class="f"><label for="files">素材のリンク<em>任意・あとからでもOK</em></label><input id="files" name="files" type="url" placeholder="ギガファイル便やGoogleドライブなど"></div>
+      <div class="f"><label for="note">イメージや希望<em>任意</em></label><textarea id="note" name="note" placeholder="「原曲っぽく」「急ぎ」など、ふわっとでOK"></textarea></div>
+      <div><button class="cta" type="submit" id="submitBtn">依頼を送信する</button><div class="err" id="e-submit"></div></div>
+    </form>
+  </div>
+  <div class="done" id="done" hidden aria-live="polite">
+    <h2>依頼を送信しました。</h2>
+    <p class="intro">確認メールを自動でお送りしています。24時間以内に、金額と納期をご連絡します。</p>
+    <a class="cta" href="#top">トップへ戻る</a>
+  </div>
+</section>
+</main>
+
+<footer>Studio冬桜 ／ X ［@アカウントID：仮］</footer>
+
+<script>
+/* ここに Google Apps Script のウェブアプリURLを貼ると、送信がスプレッドシートに届きます */
+const GAS_URL = '';
+
+const views = ['top','beginner','pro','order'];
+function show(){
+  let h = location.hash.replace('#','') || 'top';
+  if(!views.includes(h)) h = 'top';
+  views.forEach(v => document.getElementById('v-'+v).classList.toggle('on', v===h));
+  document.getElementById('backBtn').hidden = h==='top';
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', show);
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => location.hash = b.dataset.go));
+document.getElementById('backBtn').addEventListener('click', () => location.hash = 'top');
+show();
+
+/* waveform: 同じ歌の MIX前（音量がバラバラ・ノイズ）→ MIX後（音量が揃った波形）。再生位置の線がゆっくり流れる */
+const cv = document.getElementById('fx'), cx = cv.getContext('2d');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W=0,H=0,DPR=1,B=[],isAfter=false,mix=0,raf=0,t0=performance.now();
+function rnd(i){ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
+function build(){
+  const r = cv.getBoundingClientRect(); W=r.width; H=r.height; DPR=Math.min(window.devicePixelRatio||1,2);
+  cv.width=W*DPR; cv.height=H*DPR;
+  const pad=Math.max(28,W*0.08), n=Math.max(48,Math.floor((W-pad*2)/4));
+  B=[];
+  for(let i=0;i<n;i++){
+    const u=i/(n-1);
+    /* 歌のフレーズ：4つの塊と、その間の息継ぎ */
+    const ph=(u*4)%1, gap = ph>0.86 ? Math.max(0,1-(ph-0.86)/0.06) * (ph>0.92?0:1) : 1;
+    const phrase = Math.min(1, ph/0.08) * gap;
+    const body = 0.55 + 0.45*rnd(i);
+    const clean = phrase>0.02 ? (0.5+0.5*body)*phrase : 0.015;
+    const spike = rnd(i+900)<0.12 ? 1.0 : 0.25+0.55*rnd(i+500);
+    const rough = phrase>0.02 ? Math.min(1, body*spike*phrase*1.25) : 0.04+0.05*rnd(i+77);
+    B.push({x:pad+u*(W-pad*2), u, clean, rough, h:0});
+  }
+}
+function frame(now){
+  const t=(now-t0)/1000;
+  mix += ((isAfter?1:0)-mix)*0.07;
+  cx.setTransform(DPR,0,0,DPR,0,0); cx.clearRect(0,0,W,H);
+  const cy=H/2, maxH=H*0.40, play = reduce ? -1 : (t*0.06)%1.15;
+  for(const b of B){
+    const target=(b.rough+(b.clean-b.rough)*mix)*maxH;
+    b.h += (target-b.h)*0.12;
+    const played = b.u < play;
+    const lum = played ? Math.round(120+mix*120) : Math.round(70+mix*50);
+    cx.fillStyle='rgb('+lum+','+(lum+2)+','+(lum+4)+')';
+    cx.fillRect(b.x-1, cy-b.h-0.5, 2, b.h*2+1);
+  }
+  if(play>=0 && play<=1){ const px=B[0].x+play*(B[B.length-1].x-B[0].x); cx.fillStyle='#ECEEF0'; cx.globalAlpha=0.7; cx.fillRect(px,cy-maxH-8,1,maxH*2+16); cx.globalAlpha=1; }
+  if(!reduce && document.getElementById('v-top').classList.contains('on')) raf=requestAnimationFrame(frame); else raf=0;
+}
+function kick(){ if(reduce){ mix=isAfter?1:0; for(const b of B) b.h=(isAfter?b.clean:b.rough)*H*0.40; frame(performance.now()); } else if(!raf) raf=requestAnimationFrame(frame); }
+function fit(){ if(!document.getElementById('v-top').classList.contains('on')) return; build(); kick(); }
+window.addEventListener('resize', fit);
+window.addEventListener('hashchange', ()=>setTimeout(fit,0));
+
+const bB = document.getElementById('bBefore'), bA = document.getElementById('bAfter');
+const aB = document.getElementById('aBefore'), aA = document.getElementById('aAfter');
+const hasAudio = aB.getAttribute('src') && aA.getAttribute('src');
+if(hasAudio) document.getElementById('audioNote').textContent = '';
+function pick(after, silent){
+  isAfter = after;
+  bB.setAttribute('aria-pressed', !after); bA.setAttribute('aria-pressed', after);
+  kick();
+  if(hasAudio && !silent){
+    const on = after?aA:aB, off = after?aB:aA, t = off.currentTime;
+    off.pause(); on.currentTime = t; on.play().catch(()=>{});
+  }
+}
+bB.addEventListener('click',()=>pick(false));
+bA.addEventListener('click',()=>pick(true));
+fit();
+setTimeout(()=>pick(true,true), reduce?0:1100);
+setTimeout(()=>document.body.classList.remove('intro'), 2600);
+
+/* quiz */
+const PLANS = {
+  short:{name:'ショート',price:'¥6,500',plan:'ショート ¥6,500',days:'3〜5日'},
+  one:{name:'ワンコーラス',price:'¥10,500',plan:'ワンコーラス ¥10,500',days:'5〜7日'},
+  full:{name:'スタンダード',price:'¥15,000',plan:'スタンダード ¥15,000',days:'7〜10日'},
+  prem:{name:'プレミアム',price:'¥20,000',plan:'プレミアム ¥20,000',days:'7〜10日'},
+  ask:{name:'相談して決める',price:'無料相談',plan:'相談して決めたい',days:''}
+};
+let chosen = null, rush = false;
+function evalQuiz(){
+  const len = document.querySelector('input[name=len]:checked');
+  const care = document.querySelector('input[name=care]:checked');
+  const r = document.querySelector('input[name=rush]:checked');
+  if(!len||!care||!r) return;
+  rush = r.value==='yes';
+  let key = len.value==='short'?'short':len.value==='one'?'one':len.value==='full'?(care.value==='high'?'prem':'full'):'ask';
+  chosen = PLANS[key];
+  document.getElementById('rName').textContent = 'おすすめ：'+chosen.name;
+  const pe = document.getElementById('rPrice'), m = chosen.price.match(/[\d,]+/);
+  if(m && !reduce){ const end = +m[0].replace(/,/g,''), st = performance.now();
+    (function tick(n){ const q = Math.min(1,(n-st)/600), e = 1-Math.pow(1-q,3); pe.textContent = '¥'+Math.round(end*e).toLocaleString('ja-JP'); if(q<1) requestAnimationFrame(tick); })(st);
+  } else pe.textContent = chosen.price;
+  let d = key==='ask' ? '曲が決まったら、まずは気軽にご相談ください。' : '納期の目安は'+chosen.days+'です。';
+  if(rush && key!=='ask') d += ' 特急（+¥3,000〜）で約半分に短縮できます。';
+  document.getElementById('rDesc').textContent = d;
+  document.getElementById('result').hidden = false;
+}
+document.querySelectorAll('#v-beginner input').forEach(i=>i.addEventListener('change',evalQuiz));
+document.getElementById('toOrderFromQuiz').addEventListener('click',()=>{
+  if(chosen) document.getElementById('plan').value = chosen.plan;
+  if(rush) document.getElementById('note').value = '特急希望';
+  location.hash = 'order';
+});
+
+/* form */
+const form = document.getElementById('orderForm');
+const req = {name:'お名前を入力してください', contact:'メールアドレスを入力してください', song:'曲名を入力してください', plan:'プランを選んでください'};
+Object.keys(req).forEach(k=>document.getElementById(k).addEventListener('input',()=>document.getElementById('e-'+k).textContent=''));
+form.addEventListener('submit', async e=>{
+  e.preventDefault();
+  let ok = true;
+  for(const k in req){
+    const v = document.getElementById(k).value.trim();
+    let msg = v ? '' : req[k];
+    if(k==='contact' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) msg = 'メールアドレスの形式を確認してください';
+    document.getElementById('e-'+k).textContent = msg;
+    if(msg) ok = false;
+  }
+  if(!ok) return;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = '送信しています';
+  try{
+    if(GAS_URL){
+      await fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.fromEntries(new FormData(form)))});
+    }
+    document.getElementById('formWrap').hidden = true;
+    document.getElementById('done').hidden = false;
+  }catch(err){
+    document.getElementById('e-submit').textContent = '送信できませんでした。通信状況を確認して、もう一度送信してください。';
+    btn.disabled = false; btn.textContent = '依頼を送信する';
+  }
+});
+</script>
+</body>
+</html>
