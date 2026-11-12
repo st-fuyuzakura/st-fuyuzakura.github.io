@@ -64,6 +64,7 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:8
 .ab button{border:1px solid var(--line);background:transparent;padding:10px 16px;font-size:14px;min-height:44px;cursor:pointer;border-radius:2px}
 .ab button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .ab small{color:var(--sub);flex-basis:100%;font-size:12px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .ab .play{display:inline-flex;align-items:center;gap:10px;margin-right:8px}
 .ab .play[hidden],.ab .time[hidden]{display:none}
 .ab .play .ico{width:0;height:0;border-style:solid;border-width:6px 0 6px 10px;border-color:transparent transparent transparent currentColor}
@@ -290,6 +291,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
       <div class="f"><label for="x">XのID<em>任意</em></label><input id="x" name="x" placeholder="@"></div>
       <div class="f"><label for="files">素材のリンク<em>任意・あとからでもOK</em></label><input id="files" name="files" type="url" placeholder="ギガファイル便やGoogleドライブなど"></div>
       <div class="f"><label for="note">イメージや希望<em>任意</em></label><textarea id="note" name="note" placeholder="「原曲っぽく」「急ぎ」など、ふわっとでOK"></textarea></div>
+      <div class="hp" aria-hidden="true"><label for="website">website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
       <div><button class="cta" type="submit" id="submitBtn">依頼を送信する</button><div class="err" id="e-submit"></div></div>
     </form>
   </div>
