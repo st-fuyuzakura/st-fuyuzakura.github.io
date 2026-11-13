@@ -570,7 +570,7 @@ const PLANS = {
   prem:{name:'プレミアム',price:'¥20,000',plan:'プレミアム ¥20,000',days:'7〜10日'},
   ask:{name:'相談して決める',price:'無料相談',plan:'相談して決めたい',days:''}
 };
-let chosen = null, rush = false;
+let chosen = null, rush = false, priceRun = 0;
 function evalQuiz(){
   const len = document.querySelector('input[name=len]:checked');
   const care = document.querySelector('input[name=care]:checked');
@@ -581,8 +581,10 @@ function evalQuiz(){
   chosen = PLANS[key];
   document.getElementById('rName').textContent = 'おすすめ：'+chosen.name;
   const pe = document.getElementById('rPrice'), m = chosen.price.match(/[\d,]+/);
+  /* 答えを素早く変えたとき、前の金額アニメーションが新しい結果を上書きしないよう番号で打ち切る */
+  const run = ++priceRun;
   if(m && !reduce){ const end = +m[0].replace(/,/g,''), st = performance.now();
-    (function tick(n){ const q = Math.min(1,(n-st)/600), e = 1-Math.pow(1-q,3); pe.textContent = '¥'+Math.round(end*e).toLocaleString('ja-JP'); if(q<1) requestAnimationFrame(tick); })(st);
+    (function tick(n){ if(run!==priceRun) return; const q = Math.min(1,Math.max(0,(n-st)/600)), e = 1-Math.pow(1-q,3); pe.textContent = '¥'+Math.round(end*e).toLocaleString('ja-JP'); if(q<1) requestAnimationFrame(tick); })(st);
   } else pe.textContent = chosen.price;
   let d = key==='ask' ? '曲が決まったら、まずは気軽にご相談ください。' : '納期の目安は'+chosen.days+'です。';
   if(rush && key!=='ask') d += ' 特急（+¥3,000〜）で約半分に短縮できます。';
