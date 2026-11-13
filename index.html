@@ -381,14 +381,15 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
       <div class="f"><label for="files">素材のリンク<em>任意・あとからでもOK</em></label><input id="files" name="files" type="url" placeholder="ギガファイル便やGoogleドライブなど"></div>
       <div class="f"><label for="note">イメージや希望<em>任意</em></label><textarea id="note" name="note" placeholder="「原曲っぽく」「急ぎ」など、ふわっとでOK"></textarea></div>
       <div class="hp" aria-hidden="true"><label for="website">website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
-      <div><button class="cta" type="submit" id="submitBtn">依頼を送信する</button><div class="err" id="e-submit"></div></div>
+      <div><button class="cta" type="submit" id="submitBtn">依頼を送信する</button><div class="err" id="e-submit" role="alert"></div></div>
     </form>
   </div>
   <div class="done" id="done" hidden aria-live="polite">
-    <h2>依頼を送信しました。</h2>
+    <h2 id="doneTitle" tabindex="-1">依頼を送信しました。</h2>
     <p class="intro"><span id="doneMail"></span>確認メールを自動でお送りしています。24時間以内に、金額と納期をご連絡します。</p>
     <p class="note done-note">数分たっても確認メールが届かない場合は、迷惑メールフォルダをご確認ください。それでも見当たらないときは、メールアドレスの入力ミスか送信の失敗が考えられるため、お手数ですがもう一度フォームからお送りください。</p>
-    <a class="cta" href="#top">トップへ戻る</a>
+    <button class="back" id="retryOrder" type="button">入力内容を確認して再送する</button>
+    <p><a href="#top">トップへ戻る</a></p>
   </div>
 </section>
 </main>
@@ -611,6 +612,13 @@ document.getElementById('toOrderFromQuiz').addEventListener('click',()=>{
 
 /* form */
 const form = document.getElementById('orderForm');
+document.getElementById('retryOrder').addEventListener('click',()=>{
+  document.getElementById('done').hidden = true;
+  document.getElementById('formWrap').hidden = false;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = false; btn.textContent = '依頼を送信する';
+  document.getElementById('contact').focus();
+});
 const req = {name:'お名前を入力してください', contact:'メールアドレスを入力してください', song:'曲名を入力してください', plan:'プランを選んでください'};
 function clearFieldError(k){
   document.getElementById('e-'+k).textContent = '';
@@ -619,6 +627,8 @@ function clearFieldError(k){
 Object.keys(req).forEach(k=>document.getElementById(k).addEventListener('input',()=>clearFieldError(k)));
 form.addEventListener('submit', async e=>{
   e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  if(btn.disabled) return; // 連打・Enter等でも処理中と送信済みの再送信を防ぐ
   let firstInvalid = null;
   for(const k in req){
     const v = document.getElementById(k).value.trim();
@@ -633,19 +643,26 @@ form.addEventListener('submit', async e=>{
     firstInvalid.scrollIntoView({block:'center', behavior:'instant'});
     return;
   }
-  const btn = document.getElementById('submitBtn');
+  const payload = Object.fromEntries(new FormData(form));
+  document.getElementById('e-submit').textContent = '';
+  form.setAttribute('aria-busy', 'true');
   btn.disabled = true; btn.textContent = '送信しています';
   try{
     if(GAS_URL){
-      await fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.fromEntries(new FormData(form)))});
+      await fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
     }
     /* GASは no-cors のため成否を受け取れない。送信先を見せ、入力ミスに依頼者自身が気付けるようにする */
-    document.getElementById('doneMail').textContent = document.getElementById('contact').value.trim()+' 宛てに、';
+    document.getElementById('doneMail').textContent = payload.contact.trim()+' 宛てに、';
     document.getElementById('formWrap').hidden = true;
     document.getElementById('done').hidden = false;
+    const title = document.getElementById('doneTitle');
+    title.focus();
+    title.scrollIntoView({block:'center', behavior:'instant'});
   }catch(err){
     document.getElementById('e-submit').textContent = '送信できませんでした。通信状況を確認して、もう一度送信してください。';
     btn.disabled = false; btn.textContent = '依頼を送信する';
+  }finally{
+    form.removeAttribute('aria-busy');
   }
 });
 </script>
