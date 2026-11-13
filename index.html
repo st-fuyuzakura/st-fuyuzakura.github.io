@@ -182,6 +182,9 @@ input,select,textarea{font-size:16px}
 .err{color:#F2B8B5;font-size:13px;min-height:1em}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .err{color:#F2B8B5}}
 .done{padding:48px 0}
+.done .intro{margin-bottom:16px}
+.done-note{margin:0 0 40px;max-width:34em;line-height:1.8}
+#doneMail{color:var(--ink);word-break:break-all}
 footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-size:13px;text-align:center}
 
 /* menu card */
@@ -383,7 +386,8 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
   </div>
   <div class="done" id="done" hidden aria-live="polite">
     <h2>依頼を送信しました。</h2>
-    <p class="intro">確認メールを自動でお送りしています。24時間以内に、金額と納期をご連絡します。</p>
+    <p class="intro"><span id="doneMail"></span>確認メールを自動でお送りしています。24時間以内に、金額と納期をご連絡します。</p>
+    <p class="note done-note">数分たっても確認メールが届かない場合は、迷惑メールフォルダをご確認ください。それでも見当たらないときは、メールアドレスの入力ミスか送信の失敗が考えられるため、お手数ですがもう一度フォームからお送りください。</p>
     <a class="cta" href="#top">トップへ戻る</a>
   </div>
 </section>
@@ -635,6 +639,8 @@ form.addEventListener('submit', async e=>{
     if(GAS_URL){
       await fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.fromEntries(new FormData(form)))});
     }
+    /* GASは no-cors のため成否を受け取れない。送信先を見せ、入力ミスに依頼者自身が気付けるようにする */
+    document.getElementById('doneMail').textContent = document.getElementById('contact').value.trim()+' 宛てに、';
     document.getElementById('formWrap').hidden = true;
     document.getElementById('done').hidden = false;
   }catch(err){
