@@ -489,7 +489,7 @@ function frame(now){
   if(onTop && (!reduce || AU.playing)) raf=requestAnimationFrame(frame); else raf=0;
 }
 function kick(){ if(!raf) raf=requestAnimationFrame(frame); }
-function fit(){ if(!document.getElementById('v-top').classList.contains('on')) return; build(); kick(); }
+function fit(){ if(!document.getElementById('v-top').classList.contains('on')) return; build(); moveInd(false); kick(); }
 window.addEventListener('resize', fit);
 window.addEventListener('hashchange', ()=>{ if(location.hash.replace('#','')!=='top' && AU.playing) stopAudio(false); setTimeout(fit,0); });
 
@@ -537,7 +537,8 @@ function moveInd(anim){
   ind.style.transition=anim&&!reduce?'':'none';
   ind.style.transform='translateX('+b.offsetLeft+'px)'; ind.style.width=b.offsetWidth+'px';
 }
-window.addEventListener('resize',()=>moveInd(false));
+/* 非表示から戻った際は fit() で、Webフォント確定後も選択中の幅を測り直す */
+if(document.fonts) document.fonts.ready.then(()=>moveInd(false));
 /* 段階を押したら、止まっていればそのまま再生する */
 modeBtns.forEach((b,i)=>b.addEventListener('click',()=>{ pick(i); if(AU.buf[0] && !AU.playing) startAudio(); }));
 /* 波形をタップしても再生／停止 */
