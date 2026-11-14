@@ -116,17 +116,22 @@ h3{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.02em;
 .cta{display:inline-block;background:var(--accent);color:var(--accent-ink);border:0;padding:16px 28px;min-height:52px;font-weight:700;cursor:pointer;border-radius:2px;text-decoration:none}
 
 /* quiz */
-.q{border-top:1px solid var(--line);padding:28px 0}
-.q legend{font-weight:700;font-size:16px;padding:0;margin-bottom:14px}
+.q{padding:26px 0 12px}
+.q:first-of-type{border-top:1px solid var(--line)}
+.q legend{font-family:var(--serif);font-weight:500;font-size:21px;padding:0;margin-bottom:12px}
 .q fieldset{border:0;padding:0;margin:0}
-.opts{display:flex;flex-wrap:wrap;gap:8px}
-.opts label{border:1px solid var(--line);font-size:14px;padding:10px 16px;min-height:48px;display:flex;align-items:center;cursor:pointer;border-radius:2px;background:var(--panel)}
-.opts input{position:absolute;opacity:0;pointer-events:none}
+.opts{display:grid;grid-template-columns:1fr 1fr;column-gap:28px}
+.opts label{border:0;border-bottom:1px solid var(--line);font-size:16px;padding:12px 0;min-height:52px;display:flex;align-items:center;cursor:pointer}
+.opts input{position:static;opacity:1;pointer-events:auto;accent-color:var(--ink);width:17px;height:17px;margin:0 12px 0 1px;flex:none}
 .opts input:checked+span{font-weight:700}
-.opts label:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opts label:has(input:checked){border-bottom-color:var(--ink)}
 .opts label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
-.result{margin-top:16px;padding:32px;background:var(--panel);border:1px solid var(--line)}
-.result .price{font-family:var(--num);font-size:44px;font-weight:600;line-height:1.1;margin:8px 0}
+.result{margin-top:40px;padding:28px 0 32px;border-top:2px solid var(--ink);border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;column-gap:24px;align-items:baseline}
+.result[hidden]{display:none}
+.result p{grid-column:1/-1}
+.result .cta{grid-column:1/-1;justify-self:start;background:transparent;color:var(--ink);border:1px solid var(--sub);font-weight:500;padding:12px 20px;min-height:48px}
+.result .cta:hover{border-color:var(--ink)}
+.result .price{font-family:var(--num);font-size:36px;font-weight:400;line-height:1.2;margin:0 0 20px}
 .result p{color:var(--sub);margin:0 0 24px}
 .steps{list-style:none;padding:0;margin:0;counter-reset:s}
 .steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:12px;padding:16px 0;border-top:1px solid var(--line)}
@@ -163,10 +168,10 @@ dl.spec dt{color:var(--sub);padding-right:24px;font-size:14px}
   dl.spec{grid-template-columns:1fr}
   dl.spec dt{border-bottom:0;padding:12px 0 0}
   dl.spec dd{padding:2px 0 12px}
-  .result{padding:24px 20px}
+  .result{padding:24px 0;grid-template-columns:1fr;gap:8px}
   .result .price{font-size:36px}
   .hero{padding:0 0 56px}
-  .opts{flex-direction:column}
+  .opts{grid-template-columns:1fr}
   .cta{width:100%;text-align:center}
   table{font-size:14px}
 }
@@ -240,12 +245,12 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 
     <div class="hero-copy">
     <h1><span class="l"><span>その歌声、</span></span><span class="l"><span>ちゃんと届く音に。</span></span></h1>
-    <p class="lead">歌ってみたのボーカルMIX。録った素材を送るだけで、補正からマスタリングまで仕上げます。</p>
+    <p class="lead">歌ってみたのボーカルMIX。ピッチやタイミングの補正、ノイズ処理からマスタリングまで。</p>
 
     </div>
 
     <div class="doors">
-      <button class="door main" type="button" data-go="beginner"><b>はじめて依頼する</b><span>3つの質問でプランがわかります</span></button>
+      <button class="door main" type="button" data-go="beginner"><b>はじめて依頼する</b><span>歌った長さからプランを選ぶ</span></button>
       <button class="door" type="button" data-go="pro"><b>料金・仕様を見る</b><span>依頼に慣れている方はこちら</span></button>
     </div>
   </div>
@@ -276,17 +281,17 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 
 <!-- BEGINNER -->
 <section class="view wrap page" id="v-beginner">
-  <h2>3つ答えるだけで、<br>プランが決まります。</h2>
-  <p class="intro">長さが未定なら「まだ決めていない」でOK。あとから相談できます。</p>
+  <h2>はじめてのMIX依頼</h2>
+  <p class="intro">歌った長さ、仕上げ方、急ぎかどうか。<br>この3つから、プランと料金の目安を確認できます。</p>
 
-  <div class="q"><fieldset><legend>どのくらいの長さを歌いましたか？</legend><div class="opts" id="q1">
+  <div class="q"><fieldset><legend>歌った長さは？</legend><div class="opts" id="q1">
     <label><input type="radio" name="len" value="short"><span>30秒くらい（サビだけ等）</span></label>
     <label><input type="radio" name="len" value="one"><span>1番だけ</span></label>
     <label><input type="radio" name="len" value="full"><span>フルで1曲</span></label>
     <label><input type="radio" name="len" value="unknown"><span>まだ決めていない</span></label>
   </div></fieldset></div>
 
-  <div class="q"><fieldset><legend>仕上がりへのこだわりは？</legend><div class="opts">
+  <div class="q"><fieldset><legend>仕上げ方は？</legend><div class="opts">
     <label><input type="radio" name="care" value="std"><span>おまかせで大丈夫</span></label>
     <label><input type="radio" name="care" value="high"><span>細かく相談しながら詰めたい</span></label>
   </div></fieldset></div>
@@ -305,10 +310,10 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 
   <h3>依頼の流れ</h3>
   <ol class="steps">
-    <li><div><b>フォームを送る</b><span>素材はまだなくても大丈夫です。</span></div></li>
+    <li><div><b>フォームを送る</b><span>名前・メールアドレス・曲名・プランを入力。素材のリンクはあとから送れます。</span></div></li>
     <li><div><b>金額と納期のご連絡</b><span>24時間以内にメールでお送りします。</span></div></li>
     <li><div><b>素材を送ってお支払い</b><span>ファイル共有サービスのリンクを貼るだけです。</span></div></li>
-    <li><div><b>仕上がりを確認</b><span>気になるところは普段の言葉で伝えてください。</span></div></li>
+    <li><div><b>仕上がりを確認</b><span>「サビの声をもう少し前に」など、気になる箇所を伝えてください。</span></div></li>
     <li><div><b>完成データを受け取る</b><span>動画にそのまま使える形でお渡しします。</span></div></li>
   </ol>
 
