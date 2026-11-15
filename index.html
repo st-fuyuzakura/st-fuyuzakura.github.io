@@ -299,7 +299,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
       <ul class="menu-opt">
         <li><span>トラック追加</span><span>+2,000／本</span></li>
         <li><span>ハモリ追加</span><span>+1,500〜</span></li>
-        <li><span>特急</span><span>+3,000〜</span></li>
+        <li><span>お急ぎ（7日以内）</span><span>+3,000</span></li>
         <li><span>修正追加</span><span>+1,500／回</span></li>
       </ul>
       <div class="menu-foot"><span>税込・円</span><button type="button" class="menu-more" data-go="pro">くわしい料金・仕様 →</button></div>
@@ -363,10 +363,10 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
   <div class="tbl"><table class="plans">
     <thead><tr><th>プラン／歌の長さ</th><th>料金</th><th>納期</th><th>無料修正</th></tr></thead>
     <tbody>
-      <tr><td><b>ショート</b><span class="len">30秒以内</span><i class="bar" style="--w:14%" aria-hidden="true"></i></td><td class="n">6,500</td><td data-l="納期">3〜5日</td><td data-l="無料修正">1回</td></tr>
-      <tr><td><b>ワンコーラス</b><span class="len">1番程度</span><i class="bar" style="--w:42%" aria-hidden="true"></i></td><td class="n">10,500</td><td data-l="納期">5〜7日</td><td data-l="無料修正">1回</td></tr>
-      <tr><td><b>スタンダード</b><span class="len">フル</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">15,000</td><td data-l="納期">7〜10日</td><td data-l="無料修正">2回</td></tr>
-      <tr><td><b>プレミアム</b><span class="len">フル・丁寧仕上げ</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">20,000</td><td data-l="納期">7〜10日</td><td data-l="無料修正">3〜4回</td></tr>
+      <tr><td><b>ショート</b><span class="len">30秒以内</span><i class="bar" style="--w:14%" aria-hidden="true"></i></td><td class="n">6,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
+      <tr><td><b>ワンコーラス</b><span class="len">1番程度</span><i class="bar" style="--w:42%" aria-hidden="true"></i></td><td class="n">10,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
+      <tr><td><b>スタンダード</b><span class="len">フル</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">15,000</td><td data-l="納期">1か月</td><td data-l="無料修正">2回</td></tr>
+      <tr><td><b>プレミアム</b><span class="len">フル・丁寧仕上げ</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">20,000</td><td data-l="納期">1か月</td><td data-l="無料修正">3〜4回</td></tr>
     </tbody>
   </table></div>
 
@@ -377,7 +377,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     <tr><td>ハモリ追加（2声目以降）</td><td class="n">+¥1,500〜</td></tr>
     <tr><td>Studio冬桜がハモリで参加</td><td class="n">+¥4,000〜6,000</td></tr>
     <tr class="grp"><th colspan="2" scope="colgroup">納期・修正</th></tr>
-    <tr><td>特急（通常納期の約半分）</td><td class="n">+¥3,000〜5,000</td></tr>
+    <tr><td>お急ぎ（7日以内）</td><td class="n">+¥3,000</td></tr>
     <tr><td>修正回数の追加</td><td class="n">+¥1,500／回</td></tr>
     <tr class="grp"><th colspan="2" scope="colgroup">仕上げ・そのほか</th></tr>
     <tr><td>動画用エンコード強化</td><td class="n">+¥1,000〜2,000</td></tr>
@@ -607,10 +607,10 @@ setTimeout(()=>document.body.classList.remove('intro'), 2600);
 
 /* quiz */
 const PLANS = {
-  short:{name:'ショート',price:'¥6,500',plan:'ショート ¥6,500',days:'3〜5日'},
-  one:{name:'ワンコーラス',price:'¥10,500',plan:'ワンコーラス ¥10,500',days:'5〜7日'},
-  full:{name:'スタンダード',price:'¥15,000',plan:'スタンダード ¥15,000',days:'7〜10日'},
-  prem:{name:'プレミアム',price:'¥20,000',plan:'プレミアム ¥20,000',days:'7〜10日'},
+  short:{name:'ショート',price:'¥6,500',plan:'ショート ¥6,500',days:'1か月'},
+  one:{name:'ワンコーラス',price:'¥10,500',plan:'ワンコーラス ¥10,500',days:'1か月'},
+  full:{name:'スタンダード',price:'¥15,000',plan:'スタンダード ¥15,000',days:'1か月'},
+  prem:{name:'プレミアム',price:'¥20,000',plan:'プレミアム ¥20,000',days:'1か月'},
   ask:{name:'相談して決める',price:'無料相談',plan:'相談して決めたい',days:''}
 };
 let chosen = null, rush = false, priceRun = 0;
@@ -631,8 +631,8 @@ function evalQuiz(){
   } else pe.textContent = chosen.price;
   /* 金額が数え上がる途中の値を読み上げないよう、読み上げ用には最終の金額だけを置く */
   document.getElementById('rPriceSr').textContent = chosen.price;
-  let d = key==='ask' ? '曲が決まったら、まずは気軽にご相談ください。' : '納期の目安は'+chosen.days+'です。';
-  if(rush && key!=='ask') d += ' 特急（+¥3,000〜）で約半分に短縮できます。';
+  let d = key==='ask' ? '曲が決まったら、まずは気軽にご相談ください。' : '通常納期は'+chosen.days+'です。';
+  if(rush) d += ' お急ぎ納期は7日以内（追加 ¥3,000）です。';
   document.getElementById('rDesc').textContent = d;
   document.getElementById('result').hidden = false;
 }
