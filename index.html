@@ -148,7 +148,26 @@ h3{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.02em;
 /* pro */
 #v-pro .rate-heading{margin:28px 0 8px;padding:0;border:0}
 #v-pro .intro{max-width:38em}
-#v-pro .plans td.n{font-size:18px;font-variant-numeric:tabular-nums}
+#v-pro .plans td.n{font-size:26px;font-weight:400;letter-spacing:.01em;font-variant-numeric:tabular-nums}
+#v-pro .plans td.n::before{content:"¥";font-size:.55em;color:var(--sub);margin-right:3px}
+#v-pro .plans th:first-child{width:46%}
+#v-pro .plans td{vertical-align:top;padding-top:20px;padding-bottom:20px}
+#v-pro .plans td:not(:first-child):not(.n){color:var(--sub);font-family:var(--num);padding-top:28px}
+#v-pro .plans thead th{border-bottom:1px solid var(--ink)}
+.plans b{display:block;font-size:17px;font-weight:700;line-height:1.5}
+.plans .len{display:block;color:var(--sub);font-size:13px;margin-top:2px}
+.plans .bar{display:block;position:relative;height:2px;max-width:150px;margin-top:10px;background:var(--line)}
+.plans .bar::after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--w);background:var(--ink)}
+.opt tr.grp th{padding:28px 0 8px;font-size:12px;letter-spacing:.08em;color:var(--sub)}
+.opt tr.grp:first-child th{padding-top:0}
+.opt td.n{font-weight:400;color:var(--ink)}
+.set{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;margin:44px 0 0;padding:16px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--line)}
+.set .n{font-family:var(--num);font-variant-numeric:tabular-nums}
+.set i{font-style:normal;color:var(--sub);margin:0 8px}
+.pro-go{margin:56px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.pro-go .cta{background:transparent;color:var(--ink);border:1px solid var(--sub);font-weight:500;padding:12px 24px;min-height:48px}
+.pro-go .cta:hover{border-color:var(--ink)}
+.pro-go span{color:var(--sub);font-size:14px}
 table{width:100%;border-collapse:collapse;font-size:15px}
 .tbl{overflow-x:auto}
 th,td{text-align:left;padding:14px 12px 14px 0;border-bottom:1px solid var(--line)}
@@ -164,10 +183,16 @@ dl.spec dt{color:var(--sub);padding-right:24px;font-size:14px}
   .plans thead{display:none}
   .plans tr{display:grid;grid-template-columns:1fr auto;column-gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}
   .plans td{border:0;padding:0}
-  .plans td:nth-child(1){font-weight:700}
-  .plans td:nth-child(2){text-align:right;font-size:18px}
-  .plans td:nth-child(n+3){grid-column:1/-1;color:var(--sub);font-size:14px}
-  .plans td[data-l]::before{content:attr(data-l)"："}
+  .plans tr{padding:18px 0}
+  .plans tbody tr:first-child{border-top:1px solid var(--ink)}
+  #v-pro .plans tbody tr:first-child td{border-top:0}
+  #v-pro .plans td{padding:0}
+  #v-pro .plans td.n{text-align:right;font-size:24px;line-height:1.3}
+  #v-pro .plans td:not(:first-child):not(.n){grid-row:2;margin-top:12px;font-size:13px;padding:0}
+  #v-pro .plans td:nth-child(4){text-align:right}
+  .plans td[data-l]::before{content:attr(data-l)"　";font-family:var(--jp)}
+  .plans .bar{max-width:none;margin-top:12px}
+  .pro-go .cta{width:auto}
   dl.spec{grid-template-columns:1fr}
   dl.spec dt{border-bottom:0;padding:12px 0 0}
   dl.spec dd{padding:2px 0 12px}
@@ -336,26 +361,29 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
   <h3 class="rate-heading">プラン別の料金と納期</h3>
 
   <div class="tbl"><table class="plans">
-    <thead><tr><th>プラン</th><th>料金</th><th>歌の長さ</th><th>納期</th><th>無料修正</th></tr></thead>
+    <thead><tr><th>プラン／歌の長さ</th><th>料金</th><th>納期</th><th>無料修正</th></tr></thead>
     <tbody>
-      <tr><td>ショート</td><td class="n">¥6,500</td><td>30秒以内</td><td data-l="納期">3〜5日</td><td data-l="無料修正">1回</td></tr>
-      <tr><td>ワンコーラス</td><td class="n">¥10,500</td><td>1番程度</td><td data-l="納期">5〜7日</td><td data-l="無料修正">1回</td></tr>
-      <tr><td>スタンダード</td><td class="n">¥15,000</td><td>フル</td><td data-l="納期">7〜10日</td><td data-l="無料修正">2回</td></tr>
-      <tr><td>プレミアム</td><td class="n">¥20,000</td><td>フル・丁寧仕上げ</td><td data-l="納期">7〜10日</td><td data-l="無料修正">3〜4回</td></tr>
+      <tr><td><b>ショート</b><span class="len">30秒以内</span><i class="bar" style="--w:14%" aria-hidden="true"></i></td><td class="n">6,500</td><td data-l="納期">3〜5日</td><td data-l="無料修正">1回</td></tr>
+      <tr><td><b>ワンコーラス</b><span class="len">1番程度</span><i class="bar" style="--w:42%" aria-hidden="true"></i></td><td class="n">10,500</td><td data-l="納期">5〜7日</td><td data-l="無料修正">1回</td></tr>
+      <tr><td><b>スタンダード</b><span class="len">フル</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">15,000</td><td data-l="納期">7〜10日</td><td data-l="無料修正">2回</td></tr>
+      <tr><td><b>プレミアム</b><span class="len">フル・丁寧仕上げ</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">20,000</td><td data-l="納期">7〜10日</td><td data-l="無料修正">3〜4回</td></tr>
     </tbody>
   </table></div>
 
   <h3>追加料金がかかる作業</h3>
-  <div class="tbl"><table><tbody>
+  <div class="tbl"><table class="opt"><tbody>
+    <tr class="grp"><th colspan="2" scope="colgroup">歌の量が増えるとき</th></tr>
     <tr><td>トラック追加（4本目以降）</td><td class="n">+¥2,000／本</td></tr>
-    <tr><td>特急（通常納期の約半分）</td><td class="n">+¥3,000〜5,000</td></tr>
     <tr><td>ハモリ追加（2声目以降）</td><td class="n">+¥1,500〜</td></tr>
     <tr><td>Studio冬桜がハモリで参加</td><td class="n">+¥4,000〜6,000</td></tr>
-    <tr><td>Xでの紹介</td><td class="n">+¥2,000</td></tr>
-    <tr><td>動画用エンコード強化</td><td class="n">+¥1,000〜2,000</td></tr>
+    <tr class="grp"><th colspan="2" scope="colgroup">納期・修正</th></tr>
+    <tr><td>特急（通常納期の約半分）</td><td class="n">+¥3,000〜5,000</td></tr>
     <tr><td>修正回数の追加</td><td class="n">+¥1,500／回</td></tr>
-    <tr><td>2曲セット／3曲セット</td><td class="n">¥27,000〜／¥39,000〜</td></tr>
+    <tr class="grp"><th colspan="2" scope="colgroup">仕上げ・そのほか</th></tr>
+    <tr><td>動画用エンコード強化</td><td class="n">+¥1,000〜2,000</td></tr>
+    <tr><td>Xでの紹介</td><td class="n">+¥2,000</td></tr>
   </tbody></table></div>
+  <p class="set"><span>まとめて依頼するとき</span><span class="n">2曲 ¥27,000〜<i>／</i>3曲 ¥39,000〜</span></p>
 
   <h3>素材と納品</h3>
   <dl class="spec">
@@ -365,7 +393,7 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     <dt>お支払い</dt><dd>［支払い方法：仮］着手前にお支払い</dd>
     <dt>キャンセル</dt><dd>［キャンセル規定：仮］</dd>
   </dl>
-  <p style="margin-top:40px"><button class="cta" type="button" data-go="order">依頼フォームへ</button></p>
+  <p class="pro-go"><button class="cta" type="button" data-go="order">依頼フォームへ</button><span>プランが決まっていなくても送れます</span></p>
   <p class="back-foot"><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
 </section>
 
