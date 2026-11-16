@@ -212,6 +212,20 @@ form{display:grid;gap:22px;max-width:520px}
 input,select,textarea{font-size:16px}
 .f input,.f select,.f textarea{background:var(--panel);border:1px solid var(--line);padding:12px 14px;min-height:48px;border-radius:2px;width:100%}
 .f textarea{min-height:110px;resize:vertical}
+.f input::placeholder,.f textarea::placeholder{color:var(--sub);opacity:.75}
+.fh{margin:2px 0 0;color:var(--sub);font-size:13px;line-height:1.75;max-width:36em}
+.lnk{background:none;border:0;padding:0 0 1px;margin-left:8px;color:var(--ink);font:inherit;cursor:pointer;border-bottom:1px solid var(--sub)}
+.lnk:hover{border-color:var(--ink)}
+.grp{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;margin:0 0 -6px;font-size:13px;color:var(--ink);letter-spacing:.06em}
+.grp i{flex:1 1 40px;height:1px;background:var(--line);align-self:center;order:3}
+.grp small{color:var(--sub);font-size:12px;letter-spacing:0;order:4;flex-basis:100%}
+.grp-opt{margin-top:6px;color:var(--sub)}
+#v-order .intro{max-width:36em;text-wrap:pretty}
+.f .lnk{display:inline-block}
+#orderForm .send .cta{background:transparent;color:var(--ink);border:1px solid var(--ink);font-weight:600;padding:14px 32px}
+#orderForm .send .cta:hover{background:var(--ink);color:var(--bg)}
+#orderForm .send .cta:disabled{opacity:.6;cursor:default;background:transparent;color:var(--ink)}
+#orderForm .send .fh{margin-top:12px}
 .err{color:#F2B8B5;font-size:13px;min-height:1em}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .err{color:#F2B8B5}}
 .done{padding:48px 0}
@@ -399,8 +413,9 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 <section class="view wrap page" id="v-order">
   <div id="formWrap">
     <h2>依頼フォーム</h2>
-    <p class="intro">必須は4つだけ。送信しただけでは料金は発生しません。</p>
+    <p class="intro">名前・メール・曲名・プランの4つで送れます。送っただけでは料金はかかりません。こちらから金額と納期を返信するので、それを見て決めてください。</p>
     <form id="orderForm" novalidate>
+      <p class="grp"><span>これだけで送れます</span><i aria-hidden="true"></i></p>
       <div class="f"><label for="name">お名前（活動名）</label><input id="name" name="name" required aria-describedby="e-name" autocomplete="nickname"><div class="err" id="e-name"></div></div>
       <div class="f"><label for="contact">連絡先メールアドレス</label><input id="contact" name="contact" required aria-describedby="e-contact" type="email" autocomplete="email" inputmode="email"><div class="err" id="e-contact"></div></div>
       <div class="f"><label for="song">曲名</label><input id="song" name="song" required aria-describedby="e-song" placeholder="例：〇〇／原曲URLでも可"><div class="err" id="e-song"></div></div>
@@ -412,13 +427,15 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
           <option>ワンコーラス ¥10,500</option>
           <option>スタンダード ¥15,000</option>
           <option>プレミアム ¥20,000</option>
-        </select><div class="err" id="e-plan"></div></div>
+        </select><p class="fh">迷ったら「相談して決めたい」で大丈夫です。<button class="lnk" type="button" data-go="beginner">3つの質問で選ぶ</button></p><div class="err" id="e-plan"></div></div>
+      <p class="grp grp-opt"><span>わかれば書いてください</span><small>あとからメールで送っても大丈夫です</small><i aria-hidden="true"></i></p>
       <div class="f"><label for="x">XのID<em>任意</em></label><input id="x" name="x" placeholder="@"></div>
-      <div class="f"><label for="files">素材のリンク<em>任意・あとからでもOK</em></label><input id="files" name="files" type="url" placeholder="ギガファイル便やGoogleドライブなど"></div>
-      <div class="f"><label for="note">イメージや希望<em>任意</em></label><textarea id="note" name="note" placeholder="「原曲っぽく」「急ぎ」など、ふわっとでOK"></textarea></div>
+      <div class="f"><label for="files">素材のリンク<em>任意</em></label><input id="files" name="files" type="url" placeholder="ギガファイル便やGoogleドライブなど" aria-describedby="h-files"><p class="fh" id="h-files">ボーカルとオケを1つのフォルダに入れて、共有リンクを貼ってください。WAV形式、エフェクトなし・曲の頭をそろえて書き出したものが理想です。テンポ（BPM）がわかれば希望欄に。録音前なら空欄で。</p></div>
+      <div class="f"><label for="note">イメージや気になっていること<em>任意</em></label><textarea id="note" name="note" placeholder="例：参考にしたい音源のURL／サビで声が埋もれる気がする／ハモリは下で"></textarea></div>
       <div class="hp" aria-hidden="true"><label for="website">website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
-      <div><button class="cta" type="submit" id="submitBtn">依頼を送信する</button><div class="err" id="e-submit" role="alert"></div></div>
+      <div class="send"><button class="cta" type="submit" id="submitBtn">依頼を送信する</button><p class="fh">送信すると、入力したアドレスに確認メールが自動で届きます。</p><div class="err" id="e-submit" role="alert"></div></div>
     </form>
+    <p class="back-foot"><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
   </div>
   <div class="done" id="done" hidden aria-live="polite">
     <h2 id="doneTitle" tabindex="-1">依頼を送信しました。</h2>
