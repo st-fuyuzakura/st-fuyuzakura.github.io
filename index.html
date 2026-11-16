@@ -438,10 +438,10 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     <p class="back-foot"><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
   </div>
   <div class="done" id="done" hidden aria-live="polite">
-    <h2 id="doneTitle" tabindex="-1">依頼を送信しました。</h2>
-    <p class="intro"><span id="doneMail"></span>確認メールを自動でお送りしています。24時間以内に、金額と納期をご連絡します。</p>
-    <p class="note done-note">数分たっても確認メールが届かない場合は、迷惑メールフォルダをご確認ください。それでも見当たらないときは、メールアドレスの入力ミスか送信の失敗が考えられるため、お手数ですがもう一度フォームからお送りください。</p>
-    <p class="done-acts"><button class="back" id="retryOrder" type="button">入力内容を確認して再送する</button><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
+    <h2 id="doneTitle" tabindex="-1">受付メールをご確認ください</h2>
+    <p class="intro">送信時に入力したメールアドレス：<br><span id="doneMail"></span></p>
+    <p class="note done-note">数分待っても受付メールが見当たらなければ、迷惑メールフォルダと上のアドレスをご確認ください。見つからない場合は、入力内容を確認してから再送できます。</p>
+    <p class="done-acts"><button class="back" id="retryOrder" type="button">入力内容を確認する</button><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
   </div>
 </section>
 </main>
@@ -707,7 +707,7 @@ form.addEventListener('submit', async e=>{
       await fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
     }
     /* GASは no-cors のため成否を受け取れない。送信先を見せ、入力ミスに依頼者自身が気付けるようにする */
-    document.getElementById('doneMail').textContent = payload.contact.trim()+' 宛てに、';
+    document.getElementById('doneMail').textContent = payload.contact.trim();
     document.getElementById('formWrap').hidden = true;
     document.getElementById('done').hidden = false;
     const title = document.getElementById('doneTitle');
