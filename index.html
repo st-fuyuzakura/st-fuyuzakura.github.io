@@ -12,6 +12,7 @@
   --bg:#0A0B0D;--panel:#121417;--ink:#ECEEF0;--sub:#AEB4BB;--line:#30343A;--accent:#ECEEF0;--accent-ink:#0A0B0D;--wave:#444950;--sakura:#C9CDD2;color-scheme:dark;
   --serif:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',serif;
   --jp:'Zen Kaku Gothic New','Hiragino Sans','Yu Gothic',sans-serif;
+  --support:system-ui,-apple-system,'Hiragino Sans','Yu Gothic UI',sans-serif;
   --num:'Archivo','Zen Kaku Gothic New',sans-serif;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -257,6 +258,14 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 .menu-foot{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-size:12px;color:var(--sub)}
 .menu-more{background:none;border:0;color:var(--ink);font-size:14px;cursor:pointer;padding:10px 0;min-height:44px;text-decoration:underline;text-underline-offset:4px}
 @media(max-width:620px){.menu-opt{grid-template-columns:1fr}.menu-list li{grid-template-columns:1fr auto}.md{grid-row:2;grid-column:1;margin-top:-6px}}
+/* 補足は端末のUI書体で読みやすく。見出しと金額は既存の書体を使用。 */
+.hero .lead,.door span,.page .intro,.fh,.note,.steps span,.tips p,
+.menu-inc,.menu-en,.menu-foot,.md,.grp small,.ab small,.result p,footer{
+  font-family:var(--support);
+  font-weight:400;
+  letter-spacing:normal;
+  -webkit-font-smoothing:auto;
+}
 </style>
 </head>
 <body class="intro">
