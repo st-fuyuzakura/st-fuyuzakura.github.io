@@ -59,7 +59,7 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:8
   .intro .hero h1 .l>span{animation:rise .9s cubic-bezier(.2,.8,.2,1) both .35s}
   .intro .hero h1 .l:nth-child(2)>span{animation-delay:.5s}
   .intro .hero .lead,.intro .hero .ab{animation:fadeUp .8s both .9s}
-  .intro .hero .doors{animation:fadeUp .8s both 1.15s}
+  .intro .hero .doors,.intro .hero .door-direct{animation:fadeUp .8s both 1.15s}
   .view.on.page{animation:viewIn .5s cubic-bezier(.2,.8,.2,1) both}
   .result:not([hidden]){animation:viewIn .5s cubic-bezier(.2,.8,.2,1) both}
   .door{transition:border-color .3s,transform .3s}
@@ -94,19 +94,26 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:8
 .ab .play[aria-pressed="true"] .ico{width:10px;height:12px;border:0;border-left:3px solid currentColor;border-right:3px solid currentColor;box-sizing:border-box}
 .ab .time{font-family:var(--num,inherit);font-size:12px;color:var(--sub);margin-left:auto;font-variant-numeric:tabular-nums;letter-spacing:.04em}
 /* 入口は装飾番号を使わず、操作名と補足だけを揃える */
-.doors{display:flex;gap:36px;border-top:1px solid var(--line);padding-top:24px}
+.doors{display:flex;align-items:flex-start;gap:36px;border-top:1px solid var(--line);padding-top:24px}
 .door{flex:1;min-width:0;display:block;text-align:left;border:0;background:none;padding:4px 0 12px;cursor:pointer;border-radius:0}
 .door b{display:inline-block;font-weight:500;font-size:17px;line-height:1.8;border-bottom:1px solid var(--sub);padding-bottom:2px;transition:border-color .2s}
 .door span{color:var(--sub);font-size:14px;line-height:1.7;display:block;margin-top:8px}
 .door:hover b,.door:focus-visible b{border-color:var(--ink)}
+/* 主入口は線を濃く・字を一段大きくして、2つの入口に強弱をつける */
+.door.main b{font-size:18px;border-color:var(--ink)}
+.door span em{font-style:normal;font-family:var(--num);font-weight:600;font-size:1.25em;color:var(--ink);margin:0 1px}
+.door-direct{margin:10px 0 0;display:flex;justify-content:flex-end;align-items:center;gap:4px 10px;flex-wrap:wrap;font-size:13px;color:var(--sub);font-family:var(--support)}
+.door-direct button{background:none;border:0;padding:10px 0;min-height:44px;color:var(--ink);font-size:14px;cursor:pointer;text-decoration:underline;text-decoration-color:var(--sub);text-underline-offset:4px}
+.door-direct button:hover,.door-direct button:focus-visible{text-decoration-color:var(--ink)}
 @media(max-width:620px){
   .hero-copy{grid-template-columns:1fr;gap:20px;margin-bottom:28px}
   .hero h1{font-size:clamp(28px,7.3vw,40px);line-height:1.65}
   .hero p.lead{margin:0;max-width:26em}
   .player{margin-bottom:30px}
-  .doors{flex-direction:column;gap:20px;padding-top:22px}
+  .doors{flex-direction:column;align-items:stretch;gap:20px;padding-top:22px}
   .door{padding:0;min-height:64px}
   .door span{margin-top:5px}
+  .door-direct{justify-content:flex-start;margin-top:6px}
 }
 
 /* shared */
@@ -306,9 +313,10 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
     </div>
 
     <div class="doors">
-      <button class="door main" type="button" data-go="beginner"><b>はじめて依頼する</b><span>歌った長さからプランを選ぶ</span></button>
-      <button class="door" type="button" data-go="pro"><b>料金・仕様を見る</b><span>依頼に慣れている方はこちら</span></button>
+      <button class="door main" type="button" data-go="beginner"><b>はじめて依頼する</b><span>質問は<em>3</em>つ。歌った長さと仕上げ方から、プランと料金の目安が出ます</span></button>
+      <button class="door" type="button" data-go="pro"><b>料金・仕様を見る</b><span>トラック数、ハモリ、追加料金、素材の渡し方</span></button>
     </div>
+    <p class="door-direct">プランが決まっている方は<button type="button" data-go="order">依頼フォームへ直接<span aria-hidden="true"> →</span></button></p>
   </div>
 
   <section class="menu" aria-labelledby="menuTtl">
@@ -672,7 +680,7 @@ document.getElementById('toOrderFromQuiz').addEventListener('click',()=>{
     clearFieldError('plan');
   }
   // 診断が追加した行だけ更新し、依頼者が書いた希望は残す。
-  const note = document.getElementById('note'), marker = '【プラン診断】特急希望';
+  const note = document.getElementById('note'), marker = '【プラン診断】お急ぎ（7日以内・追加 ¥3,000）希望';
   const lines = note.value.split('\n').filter(line => line !== marker);
   if(rush) lines.push(marker);
   note.value = lines.join('\n').replace(/^\n/, '');
