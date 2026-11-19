@@ -241,7 +241,22 @@ input,select,textarea{font-size:16px}
 .done-note{margin:0 0 40px;max-width:34em;line-height:1.8}
 #doneMail{color:var(--ink);word-break:break-all}
 .done-acts{display:flex;flex-wrap:wrap;gap:12px;margin:0}
-footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-size:13px;text-align:center}
+footer{margin-top:72px;color:var(--sub);font-size:13px;line-height:1.7}
+footer::before{content:"";display:block;height:9px;border-top:1px solid var(--line);background:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 64px) 0 0/100% 9px no-repeat,repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 8px) 0 0/100% 4px no-repeat;opacity:.9}
+.ft{max-width:880px;margin:0 auto;padding:40px clamp(28px,8vw,48px) 36px;display:grid;grid-template-columns:1fr minmax(0,340px);gap:32px 48px}
+.ft-name{font-family:var(--serif);font-weight:600;letter-spacing:.1em;color:var(--ink);font-size:16px;display:flex;align-items:center;gap:8px;margin:0}
+.ft-name svg{width:16px;height:16px;fill:var(--sakura)}
+.ft-what{margin:6px 0 0}
+.ft-cond{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 20px}
+.ft-cond dt{color:var(--sub);font-size:12px;padding-top:2px}
+.ft-cond dd{margin:0;color:var(--ink);font-size:14px;font-weight:400}
+.ft-cond .n{font-family:var(--num);letter-spacing:.02em}
+.ft-cond .tmp{color:var(--sub);font-size:12px}
+.ft-nav{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:0 24px;border-top:1px solid var(--line);padding-top:12px}
+.ft-nav button{background:none;border:0;padding:10px 0;min-height:44px;color:var(--sub);font-size:13px;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:5px;transition:color .2s,text-decoration-color .2s}
+.ft-nav button:hover{color:var(--ink);text-decoration-color:var(--ink)}
+.ft-nav small{margin-left:auto;font-family:var(--num);font-size:11px;letter-spacing:.08em;color:var(--sub)}
+@media(max-width:620px){.ft{grid-template-columns:1fr;gap:28px;padding-top:32px}.ft-nav{gap:0 20px}.ft-nav small{margin-left:0;width:100%;padding-top:4px}}
 
 /* menu card */
 .menu{margin:16px 0 80px}
@@ -468,7 +483,26 @@ footer{border-top:1px solid var(--line);padding:32px 24px;color:var(--sub);font-
 </section>
 </main>
 
-<footer>Studio冬桜 ／ X ［@アカウントID：仮］</footer>
+<footer>
+  <div class="ft">
+    <div>
+      <p class="ft-name"><svg viewBox="-34 -34 68 68" aria-hidden="true"><use href="#pt"/><use href="#pt" transform="rotate(72)"/><use href="#pt" transform="rotate(144)"/><use href="#pt" transform="rotate(216)"/><use href="#pt" transform="rotate(288)"/></svg>Studio冬桜</p>
+      <p class="ft-what">歌ってみたのボーカルMIX。補正・ノイズ処理・ハモリ1声・マスタリングまで基本料金に含みます。</p>
+    </div>
+    <dl class="ft-cond" aria-label="受付の条件">
+      <dt>通常納期</dt><dd>全プラン <span class="n">1</span>か月</dd>
+      <dt>お急ぎ</dt><dd><span class="n">7</span>日以内・追加 <span class="n">¥3,000</span></dd>
+      <dt>受付</dt><dd>フォームから・プラン未定でも可</dd>
+      <dt>X</dt><dd><span class="tmp">［@アカウントID：仮］</span></dd>
+    </dl>
+    <nav class="ft-nav" aria-label="フッター">
+      <button type="button" data-go="beginner">はじめての方</button>
+      <button type="button" data-go="pro">料金・仕様</button>
+      <button type="button" data-go="order">依頼フォーム</button>
+      <small>© 2026 Studio冬桜</small>
+    </nav>
+  </div>
+</footer>
 
 <script>
 /* ここに Google Apps Script のウェブアプリURLを貼ると、送信がスプレッドシートに届きます */
