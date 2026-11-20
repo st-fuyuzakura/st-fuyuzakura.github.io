@@ -302,6 +302,10 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
   letter-spacing:normal;
   -webkit-font-smoothing:auto;
 }
+.done .intro{max-width:36em;font-size:14px}
+.done-address{display:block;margin-top:12px;font-size:clamp(18px,4.8vw,24px);line-height:1.6;overflow-wrap:anywhere}
+.done .done-note{max-width:36em;line-height:1.9}
+.done .done-acts{margin-top:32px}
 </style>
 </head>
 <body class="intro">
@@ -492,7 +496,7 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
   </div>
   <div class="done" id="done" hidden aria-live="polite">
     <h2 id="doneTitle" tabindex="-1">受付メールをご確認ください</h2>
-    <p class="intro">送信時に入力したメールアドレス：<br><span id="doneMail"></span></p>
+    <p class="intro">送信時に入力したメールアドレス：<span class="done-address" id="doneMail"></span></p>
     <p class="note done-note">数分待っても受付メールが見当たらなければ、迷惑メールフォルダと上のアドレスをご確認ください。見つからない場合は、入力内容を確認してから再送できます。</p>
     <p class="done-acts"><button class="back" id="retryOrder" type="button">入力内容を確認する</button><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
   </div>
