@@ -161,6 +161,22 @@ h3{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.02em;
 .tips summary::after{content:"＋";color:var(--sub)}
 .tips[open] summary::after{content:"−"}
 .tips p{margin:0 0 14px;color:var(--sub)}
+/* 送る前の確認：問いは明朝で左、答えは一言目だけ本文色で言い切り、続きは補助色 */
+.faq{display:grid;grid-template-columns:15em 1fr;margin:0}
+.faq+.tips{margin-top:0}
+.faq dt,.faq dd{margin:0;padding:18px 0;border-top:1px solid var(--line)}
+.faq dt{font-family:var(--serif);font-weight:600;font-size:16px;line-height:1.7;padding-right:24px}
+.faq dd{font-family:var(--support);font-size:14px;line-height:1.9;color:var(--sub)}
+.faq dd b{display:block;font-family:var(--jp);font-size:16px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.faq .n{font-family:var(--num);color:var(--ink)}
+.faq .lnk{margin:0 2px;font-size:14px}
+.faq .tmp{font-size:13px}
+@media(max-width:620px){
+  .faq{grid-template-columns:1fr}
+  .faq dt{padding:20px 0 4px}
+  .faq dt:first-child{border-top:0;padding-top:4px}
+  .faq dd{border-top:0;padding:0 0 20px}
+}
 
 /* pro */
 #v-pro .rate-heading{margin:28px 0 8px;padding:0;border:0}
@@ -416,6 +432,22 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
     <li><div><b>完成データを受け取る</b><span>動画にそのまま使える形でお渡しします。</span></div></li>
   </ol>
 
+  <h3>送る前に確認しておくこと</h3>
+  <dl class="faq">
+    <dt>送っただけで料金はかかる？</dt>
+    <dd><b>かかりません。</b>金額と納期をメールで返すので、それを見てから決めてください。</dd>
+    <dt>録音がまだ終わっていない</dt>
+    <dd><b>フォームは先に送れます。</b>素材のリンクは、録り終わってから受付メールに返信して送ってください。</dd>
+    <dt>急ぎで仕上げてほしい</dt>
+    <dd><b>7日以内のお急ぎがあります。</b>追加 <span class="n">¥3,000</span>。フォームの希望欄に「お急ぎ」と書いてください。</dd>
+    <dt>ハモリも録った</dt>
+    <dd><b>1声目までは基本料金です。</b>2声目からは追加 <span class="n">¥1,500</span>〜。何声あるかを希望欄に書いてもらえると見積もりが早くなります。</dd>
+    <dt>イメージと違ったら</dt>
+    <dd><b>プランごとに決まった回数まで無料で直します。</b>回数は<button class="lnk" type="button" data-go="pro">料金表</button>に。超えた分は1回 <span class="n">¥1,500</span>です。</dd>
+    <dt>支払い方法とキャンセル</dt>
+    <dd><span class="tmp">［確認中：決まりしだい載せます］</span></dd>
+  </dl>
+
   <details class="tips"><summary>録音で気をつけること</summary>
     <p>エアコンや換気扇は止めて、静かな部屋で録ってください。</p>
     <p>伴奏はイヤホンやヘッドホンで聴き、マイクに入らないようにします。</p>
@@ -450,7 +482,6 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
     <tr class="grp"><th colspan="2" scope="colgroup">納期・修正</th></tr>
     <tr><td>お急ぎ（7日以内）</td><td class="n">+¥3,000</td></tr>
     <tr><td>修正回数の追加</td><td class="n">+¥1,500／回</td></tr>
-    <tr class="grp"><th colspan="2" scope="colgroup">仕上げ・そのほか</th></tr>
   </tbody></table></div>
   <p class="set"><span>まとめて依頼するとき</span><span class="n">2曲 ¥27,000〜<i>／</i>3曲 ¥39,000〜</span></p>
 
