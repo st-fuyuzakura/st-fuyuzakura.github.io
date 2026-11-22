@@ -216,7 +216,8 @@ td.n{font-family:var(--num);font-weight:600}
 .note{color:var(--sub);font-size:14px;margin-top:12px}
 dl.spec{display:grid;grid-template-columns:auto 1fr;gap:0;margin:0}
 dl.spec dt,dl.spec dd{padding:12px 0;border-bottom:1px solid var(--line);margin:0}
-dl.spec dt{color:var(--sub);padding-right:24px;font-size:14px}
+dl.spec dd{font-family:var(--support);font-size:15px;line-height:1.85}
+dl.spec dt{font-family:var(--support);color:var(--sub);padding-right:24px;font-size:14px}
 @media(max-width:620px){
   .plans thead{display:none}
   .plans tr{display:grid;grid-template-columns:1fr auto;column-gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}
@@ -502,6 +503,9 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
     <dt>受け取り形式</dt><dd>WAV（48kHz / 24bit 推奨、44.1kHz可）</dd>
     <dt>トラック</dt><dd>パートごとに頭をそろえて書き出し、エフェクトなし</dd>
     <dt>納品形式</dt><dd>WAV＋MP3（仮）</dd>
+  </dl>
+  <h3>お支払いとキャンセル</h3>
+  <dl class="spec">
     <dt>お支払い</dt><dd>［支払い方法：仮］着手前にお支払い</dd>
     <dt>キャンセル</dt><dd>［キャンセル規定：仮］</dd>
   </dl>
