@@ -144,13 +144,24 @@ h3{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.02em;
 .opts input:checked+span{font-weight:700}
 .opts label:has(input:checked){border-bottom-color:var(--ink)}
 .opts label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
-.result{margin-top:40px;padding:28px 0 32px;border-top:2px solid var(--ink);border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;column-gap:24px;align-items:baseline}
+.result{margin-top:40px;padding:26px 0 32px;border-top:2px solid var(--ink);border-bottom:1px solid var(--line)}
 .result[hidden]{display:none}
-.result p{grid-column:1/-1}
-.result .cta{grid-column:1/-1;justify-self:start;background:transparent;color:var(--ink);border:1px solid var(--sub);font-weight:500;padding:12px 20px;min-height:48px}
+.result .r-tag{font-family:var(--support);font-size:13px;color:var(--sub);margin:0 0 6px;letter-spacing:.03em}
+.result .r-head{display:flex;justify-content:space-between;align-items:baseline;gap:4px 20px;flex-wrap:wrap;margin:0 0 18px}
+.result .r-name{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:.06em}
+.result .cta{justify-self:start;background:transparent;color:var(--ink);border:1px solid var(--sub);font-weight:500;padding:12px 20px;min-height:48px}
 .result .cta:hover{border-color:var(--ink)}
-.result .price{font-family:var(--num);font-size:36px;font-weight:400;line-height:1.2;margin:0 0 20px}
+.result .price{font-family:var(--num);font-size:36px;font-weight:400;line-height:1.2;font-variant-numeric:tabular-nums}
 .result p{color:var(--sub);margin:0 0 24px}
+.r-sheet{margin:0 0 28px;border-top:1px solid var(--line)}
+.r-sheet div{display:grid;grid-template-columns:5.5em 1fr;column-gap:16px;padding:11px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.r-sheet dt{font-family:var(--support);font-size:13px;color:var(--sub)}
+.r-sheet dd{margin:0;font-size:15px;line-height:1.7}
+.r-sheet .n{font-family:var(--num);font-variant-numeric:tabular-nums}
+.r-sheet .sum{border-bottom-color:var(--sub)}
+.r-sheet .inc dd{font-family:var(--support);font-size:14px;color:var(--sub)}
+.r-sheet .sum dd{font-size:20px}
+.r-sheet small{font-family:var(--support);font-size:12px;color:var(--sub);margin-left:8px}
 .steps{list-style:none;padding:0;margin:0;counter-reset:s}
 .steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:12px;padding:22px 0;border-top:1px solid var(--line)}
 .steps li::before{content:counter(s);font-family:var(--num);font-size:13px;color:var(--sub)}
@@ -430,8 +441,9 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
   </div></fieldset></div>
 
   <div class="result" id="result" hidden aria-live="polite">
-    <div id="rName" style="font-weight:700"></div>
-    <div class="price" id="rPrice" aria-hidden="true"></div><span class="sr" id="rPriceSr"></span>
+    <p class="r-tag" id="rWhy"></p>
+    <div class="r-head"><span class="r-name" id="rName"></span><span class="price" id="rPrice" aria-hidden="true"></span><span class="sr" id="rPriceSr"></span></div>
+    <dl class="r-sheet" id="rSheet"></dl>
     <p id="rDesc"></p>
     <button class="cta" type="button" id="toOrderFromQuiz">このプランで依頼する</button>
   </div>
@@ -745,10 +757,10 @@ setTimeout(()=>document.body.classList.remove('intro'), 2600);
 
 /* quiz */
 const PLANS = {
-  short:{name:'ショート',price:'¥6,500',plan:'ショート ¥6,500',days:'1か月'},
-  one:{name:'ワンコーラス',price:'¥10,500',plan:'ワンコーラス ¥10,500',days:'1か月'},
-  full:{name:'スタンダード',price:'¥15,000',plan:'スタンダード ¥15,000',days:'1か月'},
-  prem:{name:'プレミアム',price:'¥20,000',plan:'プレミアム ¥20,000',days:'1か月'},
+  short:{name:'ショート',price:'¥6,500',plan:'ショート ¥6,500',days:'1か月',fix:'1回'},
+  one:{name:'ワンコーラス',price:'¥10,500',plan:'ワンコーラス ¥10,500',days:'1か月',fix:'1回'},
+  full:{name:'スタンダード',price:'¥15,000',plan:'スタンダード ¥15,000',days:'1か月',fix:'2回'},
+  prem:{name:'プレミアム',price:'¥20,000',plan:'プレミアム ¥20,000',days:'1か月',fix:'3〜4回'},
   ask:{name:'相談して決める',price:'無料相談',plan:'相談して決めたい',days:''}
 };
 let chosen = null, rush = false, priceRun = 0;
@@ -760,17 +772,30 @@ function evalQuiz(){
   rush = r.value==='yes';
   let key = len.value==='short'?'short':len.value==='one'?'one':len.value==='full'?(care.value==='high'?'prem':'full'):'ask';
   chosen = PLANS[key];
-  document.getElementById('rName').textContent = 'おすすめ：'+chosen.name;
+  const TAG = {short:'30秒くらい',one:'1番だけ',full:'フルで1曲',unknown:'長さは未定',std:'おまかせ',high:'細かく相談'};
+  document.getElementById('rWhy').textContent = [TAG[len.value],TAG[care.value]].concat(rush?['お急ぎ']:[]).join(' ／ ')+' なら';
+  document.getElementById('rName').textContent = chosen.name;
   const pe = document.getElementById('rPrice'), m = chosen.price.match(/[\d,]+/);
   /* 答えを素早く変えたとき、前の金額アニメーションが新しい結果を上書きしないよう番号で打ち切る */
   const run = ++priceRun;
   if(m && !reduce){ const end = +m[0].replace(/,/g,''), st = performance.now();
     (function tick(n){ if(run!==priceRun) return; const q = Math.min(1,Math.max(0,(n-st)/600)), e = 1-Math.pow(1-q,3); pe.textContent = '¥'+Math.round(end*e).toLocaleString('ja-JP'); if(q<1) requestAnimationFrame(tick); })(st);
-  } else pe.textContent = chosen.price;
+  } else pe.textContent = m ? chosen.price : '';
   /* 金額が数え上がる途中の値を読み上げないよう、読み上げ用には最終の金額だけを置く */
   document.getElementById('rPriceSr').textContent = chosen.price;
-  let d = key==='ask' ? '曲が決まったら、まずは気軽にご相談ください。' : '通常納期は'+chosen.days+'です。';
-  if(rush) d += ' お急ぎ納期は7日以内（追加 ¥3,000）です。';
+  /* 料金表と同じ数字で、含まれる作業・納期・修正回数・お急ぎの合計を並べる */
+  const sheet = document.getElementById('rSheet'), rows = [];
+  if(key!=='ask'){
+    const base = +m[0].replace(/,/g,'');
+    rows.push(['含む作業','3トラックまで・ハモリ1声・補正・ノイズ処理・マスタリング','inc']);
+    rows.push(['納期', rush ? '7日以内<small>通常は'+chosen.days+'</small>' : chosen.days]);
+    rows.push(['無料修正', chosen.fix]);
+    if(rush){ rows.push(['お急ぎ','<span class="n">＋¥3,000</span>']); rows.push(['合計の目安','<span class="n">¥'+(base+3000).toLocaleString('ja-JP')+'</span>','sum']); }
+  }
+  sheet.innerHTML = rows.map(r=>'<div'+(r[2]?' class="'+r[2]+'"':'')+'><dt>'+r[0]+'</dt><dd>'+r[1]+'</dd></div>').join('');
+  sheet.hidden = !rows.length;
+  let d = key==='ask' ? '曲の長さが決まっていなくても送れます。送信後のメールで金額と納期をお知らせします。' : 'トラックやハモリが多いときは、送信後のメールで追加分を含めた金額をお知らせします。';
+  if(key==='ask' && rush) d += 'お急ぎは7日以内（追加 ¥3,000）です。';
   document.getElementById('rDesc').textContent = d;
   document.getElementById('result').hidden = false;
 }
