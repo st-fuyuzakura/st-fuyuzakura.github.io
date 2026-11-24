@@ -143,6 +143,14 @@ h3{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.02em;
 .cta{display:inline-block;background:var(--accent);color:var(--accent-ink);border:0;padding:16px 28px;min-height:52px;font-weight:700;cursor:pointer;border-radius:2px;text-decoration:none}
 
 /* quiz */
+#v-beginner .intro{word-break:keep-all;margin-bottom:32px}
+/* 3問の回答状況。答えた問の目盛りだけ点く */
+.qmeter{display:flex;align-items:center;gap:14px;margin:0 0 12px}
+.qm-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:min(180px,48%)}
+.qm-bar i{height:3px;background:var(--line);transition:background .35s}
+.qm-bar i.on{background:var(--ink)}
+.qm-t{font-family:var(--num);font-size:13px;letter-spacing:.08em;color:var(--sub);font-variant-numeric:tabular-nums}
+.qm-t b{font-weight:500;color:var(--ink)}
 .q{padding:26px 0 12px}
 .q:first-of-type{border-top:1px solid var(--line)}
 .q legend{font-family:var(--serif);font-weight:500;font-size:21px;padding:0;margin-bottom:12px}
@@ -430,7 +438,8 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
 <!-- BEGINNER -->
 <section class="view wrap page" id="v-beginner">
   <h2>はじめてのMIX依頼</h2>
-  <p class="intro">回答すると、プランと料金の目安が出ます。<br>曲が未定なら「まだ決めていない」を選んでください。</p>
+  <p class="intro">3つ答えると、<wbr>プランと料金の目安が<wbr>出ます。<br>曲が未定なら<wbr>「まだ決めていない」を<wbr>選んでください。</p>
+  <p class="qmeter" aria-hidden="true"><span class="qm-bar"><i></i><i></i><i></i></span><span class="qm-t" id="qmT"><b>0</b> / 3</span></p>
 
   <div class="q"><fieldset><legend>歌った長さは？</legend><div class="opts" id="q1">
     <label><input type="radio" name="len" value="short"><span>30秒くらい（サビだけ等）</span></label>
@@ -808,7 +817,15 @@ function evalQuiz(){
   document.getElementById('rDesc').textContent = d;
   document.getElementById('result').hidden = false;
 }
-document.querySelectorAll('#v-beginner input').forEach(i=>i.addEventListener('change',evalQuiz));
+/* 回答状況の目盛り：答えた問に対応する目盛りを点け、全部そろったら結果の場所を示す */
+function meterQuiz(){
+  const done = ['len','care','rush'].map(n=>!!document.querySelector('input[name='+n+']:checked'));
+  document.querySelectorAll('.qm-bar i').forEach((el,k)=>el.classList.toggle('on',done[k]));
+  const c = done.filter(Boolean).length;
+  document.getElementById('qmT').innerHTML = c===3 ? '<b>3</b> / 3　結果はこの下に' : '<b>'+c+'</b> / 3';
+}
+document.querySelectorAll('#v-beginner input').forEach(i=>i.addEventListener('change',()=>{ meterQuiz(); evalQuiz(); }));
+meterQuiz();
 document.getElementById('toOrderFromQuiz').addEventListener('click',()=>{
   if(chosen){
     document.getElementById('plan').value = chosen.plan;
