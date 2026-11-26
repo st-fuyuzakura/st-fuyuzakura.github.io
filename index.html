@@ -167,7 +167,7 @@ h3{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.02em;
 .opts label:has(input:checked){border-bottom-color:var(--ink)}
 .opts label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
 .result{margin-top:40px;padding:26px 0 32px;border-top:2px solid var(--ink);border-bottom:1px solid var(--line)}
-.result[hidden]{display:none}
+.result button[hidden],.result[hidden]{display:none}
 .result .r-tag{font-family:var(--support);font-size:13px;color:var(--sub);margin:0 0 6px;letter-spacing:.03em}
 .result .r-head{display:flex;justify-content:space-between;align-items:baseline;gap:4px 20px;flex-wrap:wrap;margin:0 0 18px}
 .result .r-name{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:.06em}
@@ -377,6 +377,8 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
 .mb::after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--w);background:var(--sub)}
 .menu-list li:hover .mb::after{background:var(--ink)}
 .menu-list li:first-child{border-top:1px solid var(--ink)}
+.availability{display:block;font:400 13px/1.6 var(--support);color:var(--sub)}
+.menu-list li:first-child .availability{color:var(--ink);font-weight:650}
 .mn{font-weight:700;font-size:17px}
 .md{color:var(--sub);font-size:13px}
 .mp{font-family:var(--num);font-weight:600;font-size:clamp(22px,5vw,28px);letter-spacing:.02em}
@@ -451,20 +453,20 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
       <button class="door main" type="button" data-go="beginner"><b>はじめて依頼する</b><span>質問は<em>3</em>つ。歌った長さと仕上げ方から、プランと料金の目安が出ます</span></button>
       <button class="door" type="button" data-go="pro"><b>料金・仕様を見る</b><span>トラック数、ハモリ、追加料金、素材の渡し方</span></button>
     </div>
-    <p class="door-direct">プランが決まっている方は<button type="button" data-go="order">依頼フォームへ直接<span aria-hidden="true"> →</span></button></p>
+    <p class="door-direct">現在の受付はショート（30秒以内）のみです。<button type="button" data-go="order">依頼フォームへ直接<span aria-hidden="true"> →</span></button></p>
   </div>
 
   <section class="menu" aria-labelledby="menuTtl">
     <div class="menu-card">
       <div class="menu-head">
         <svg viewBox="-34 -34 68 68" aria-hidden="true"><use href="#pt"/><use href="#pt" transform="rotate(72)"/><use href="#pt" transform="rotate(144)"/><use href="#pt" transform="rotate(216)"/><use href="#pt" transform="rotate(288)"/></svg>
-        <h2 id="menuTtl">料金</h2><p class="menu-meta">通常納期は全プラン<b>1</b>か月</p>
+        <h2 id="menuTtl">料金と受付状況</h2><p class="menu-meta">通常納期は全プラン<b>1</b>か月</p>
       </div>
       <ul class="menu-list">
-        <li><span class="mn">ショート</span><span class="md">30秒以内</span><span class="mp">6,500</span><i class="mb" style="--w:14%" aria-hidden="true"></i></li>
-        <li><span class="mn">ワンコーラス</span><span class="md">1番程度</span><span class="mp">10,500</span><i class="mb" style="--w:42%" aria-hidden="true"></i></li>
-        <li><span class="mn">スタンダード</span><span class="md">フル</span><span class="mp">15,000</span><i class="mb" style="--w:100%" aria-hidden="true"></i></li>
-        <li><span class="mn">プレミアム</span><span class="md">フル・丁寧仕上げ</span><span class="mp">20,000</span><i class="mb" style="--w:100%" aria-hidden="true"></i></li>
+        <li><span class="mn">ショート<small class="availability">受付中</small></span><span class="md">30秒以内</span><span class="mp">6,500</span><i class="mb" style="--w:14%" aria-hidden="true"></i></li>
+        <li><span class="mn">ワンコーラス<small class="availability">受付休止中</small></span><span class="md">1番程度</span><span class="mp">10,500</span><i class="mb" style="--w:42%" aria-hidden="true"></i></li>
+        <li><span class="mn">スタンダード<small class="availability">受付休止中</small></span><span class="md">フル</span><span class="mp">15,000</span><i class="mb" style="--w:100%" aria-hidden="true"></i></li>
+        <li><span class="mn">プレミアム<small class="availability">受付休止中</small></span><span class="md">フル・丁寧仕上げ</span><span class="mp">20,000</span><i class="mb" style="--w:100%" aria-hidden="true"></i></li>
       </ul>
       <p class="menu-inc">全プラン込み：ピッチ・タイミング補正／ノイズ処理／ハモリ1声／マスタリング（ボーカル3トラックまで）</p>
       <ul class="menu-opt">
@@ -568,10 +570,10 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
   <div class="tbl"><table class="plans">
     <thead><tr><th>プラン／歌の長さ</th><th>料金</th><th>納期</th><th>無料修正</th></tr></thead>
     <tbody>
-      <tr><td><b>ショート</b><span class="len">30秒以内</span><i class="bar" style="--w:14%" aria-hidden="true"></i></td><td class="n">6,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
-      <tr><td><b>ワンコーラス</b><span class="len">1番程度</span><i class="bar" style="--w:42%" aria-hidden="true"></i></td><td class="n">10,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
-      <tr><td><b>スタンダード</b><span class="len">フル</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">15,000</td><td data-l="納期">1か月</td><td data-l="無料修正">2回</td></tr>
-      <tr><td><b>プレミアム</b><span class="len">フル・丁寧仕上げ</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">20,000</td><td data-l="納期">1か月</td><td data-l="無料修正">3〜4回</td></tr>
+      <tr><td><b>ショート</b><small class="availability">受付中</small><span class="len">30秒以内</span><i class="bar" style="--w:14%" aria-hidden="true"></i></td><td class="n">6,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
+      <tr><td><b>ワンコーラス</b><small class="availability">受付休止中</small><span class="len">1番程度</span><i class="bar" style="--w:42%" aria-hidden="true"></i></td><td class="n">10,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
+      <tr><td><b>スタンダード</b><small class="availability">受付休止中</small><span class="len">フル</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">15,000</td><td data-l="納期">1か月</td><td data-l="無料修正">2回</td></tr>
+      <tr><td><b>プレミアム</b><small class="availability">受付休止中</small><span class="len">フル・丁寧仕上げ</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">20,000</td><td data-l="納期">1か月</td><td data-l="無料修正">3〜4回</td></tr>
     </tbody>
   </table></div>
 
@@ -598,7 +600,7 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
     <dt>お支払い</dt><dd>［支払い方法：仮］着手前にお支払い</dd>
     <dt>キャンセル</dt><dd>［キャンセル規定：仮］</dd>
   </dl>
-  <p class="pro-go"><button class="cta" type="button" data-go="order">依頼フォームへ</button><span>プランが決まっていなくても送れます</span></p>
+  <p class="pro-go"><button class="cta" type="button" data-go="order">依頼フォームへ</button><span>現在はショートのみ受付中です</span></p>
   <p class="back-foot"><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
 </section>
 
@@ -614,13 +616,8 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
       <div class="f"><label for="song">曲名</label><input id="song" name="song" required aria-describedby="e-song" placeholder="例：〇〇／原曲URLでも可"><div class="err" id="e-song"></div></div>
       <div class="f"><label for="plan">プラン</label>
         <select id="plan" name="plan" required aria-describedby="e-plan">
-          <option value="">選んでください</option>
-          <option>相談して決めたい</option>
           <option>ショート ¥6,500</option>
-          <option>ワンコーラス ¥10,500</option>
-          <option>スタンダード ¥15,000</option>
-          <option>プレミアム ¥20,000</option>
-        </select><p class="fh">迷ったら「相談して決めたい」で大丈夫です。<button class="lnk" type="button" data-go="beginner">3つの質問で選ぶ</button></p><div class="err" id="e-plan"></div></div>
+        </select><p class="fh">現在は30秒以内のショートのみ受け付けています。</p><div class="err" id="e-plan"></div></div>
       <p class="grp grp-opt"><span>わかれば書いてください</span><small>あとからメールで送っても大丈夫です</small><i aria-hidden="true"></i></p>
       <div class="f"><label for="x">XのID<em>任意</em></label><input id="x" name="x" placeholder="@"></div>
       <div class="f"><label for="files">素材のリンク<em>任意</em></label><input id="files" name="files" type="url" placeholder="ギガファイル便やGoogleドライブなど" aria-describedby="h-files"><p class="fh" id="h-files">ボーカルとオケをまとめたフォルダの共有リンクを貼ってください。録音前なら、受付メールへの返信で送れます。</p></div>
@@ -648,7 +645,7 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
     <dl class="ft-cond" aria-label="受付の条件">
       <dt>通常納期</dt><dd>全プラン <span class="n">1</span>か月</dd>
       <dt>お急ぎ</dt><dd><span class="n">7</span>日以内・追加 <span class="n">¥3,000</span></dd>
-      <dt>受付</dt><dd>フォームから・プラン未定でも可</dd>
+      <dt>受付</dt><dd>ショートのみ・依頼フォームから</dd>
       <dt>X</dt><dd><span class="tmp">［@アカウントID：仮］</span></dd>
     </dl>
     <nav class="ft-nav" aria-label="フッター">
@@ -875,6 +872,8 @@ function evalQuiz(){
   sheet.innerHTML = rows.map(r=>'<div'+(r[2]?' class="'+r[2]+'"':'')+'><dt>'+r[0]+'</dt><dd>'+r[1]+'</dd></div>').join('');
   sheet.hidden = !rows.length;
   let d = key==='ask' ? '曲の長さが決まっていなくても送れます。送信後のメールで金額と納期をお知らせします。' : 'トラックやハモリが多いときは、送信後のメールで追加分を含めた金額をお知らせします。';
+  if(key!=='short') d = key==='ask' ? '現在受付中のショートは30秒以内です。長さが決まったら選び直してください。' : 'このプランは受付休止中です。';
+  document.getElementById('toOrderFromQuiz').hidden = key!=='short';
   if(key==='ask' && rush) d += 'お急ぎは7日以内（追加 ¥3,000）です。';
   document.getElementById('rDesc').textContent = d;
   document.getElementById('result').hidden = false;
