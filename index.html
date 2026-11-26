@@ -378,7 +378,14 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
 .menu-list li:hover .mb::after{background:var(--ink)}
 .menu-list li:first-child{border-top:1px solid var(--ink)}
 .availability{display:block;font:400 13px/1.6 var(--support);color:var(--sub)}
-.menu-list li:first-child .availability{color:var(--ink);font-weight:650}
+.hero .player{margin-bottom:12px}
+.intake{border-top:1px solid var(--line);padding-top:12px;margin-bottom:34px;font-family:var(--support)}
+.intake h2{font:600 15px/1.6 var(--support);margin:0}
+.intake ul{display:flex;flex-wrap:wrap;gap:6px 24px;list-style:none;margin:6px 0 0;padding:0}
+.intake li{font-size:14px;color:var(--sub)}
+.intake li:first-child{color:var(--ink)}
+.intake b{font-size:18px;margin-right:.4em}
+@media(max-width:620px){.intake ul{display:grid;grid-template-columns:repeat(2,1fr);column-gap:10px}}
 .mn{font-weight:700;font-size:17px}
 .md{color:var(--sub);font-size:13px}
 .mp{font-family:var(--num);font-weight:600;font-size:clamp(22px,5vw,28px);letter-spacing:.02em}
@@ -436,6 +443,16 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
       </div>
     </div>
 
+    <section class="intake" aria-labelledby="intake-title">
+      <h2 id="intake-title">依頼の受付状況</h2>
+      <ul>
+        <li><b role="img" aria-label="受付中">○</b>ショート</li>
+        <li><b role="img" aria-label="受付休止中">×</b>ワンコーラス</li>
+        <li><b role="img" aria-label="受付休止中">×</b>スタンダード</li>
+        <li><b role="img" aria-label="受付休止中">×</b>プレミアム</li>
+      </ul>
+    </section>
+
     <div class="hero-copy">
     <h1><span class="l"><span>その歌声、</span></span><span class="l"><span>ちゃんと届く音に。</span></span></h1>
     <div class="hero-side">
@@ -460,13 +477,13 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
     <div class="menu-card">
       <div class="menu-head">
         <svg viewBox="-34 -34 68 68" aria-hidden="true"><use href="#pt"/><use href="#pt" transform="rotate(72)"/><use href="#pt" transform="rotate(144)"/><use href="#pt" transform="rotate(216)"/><use href="#pt" transform="rotate(288)"/></svg>
-        <h2 id="menuTtl">料金と受付状況</h2><p class="menu-meta">通常納期は全プラン<b>1</b>か月</p>
+        <h2 id="menuTtl">料金</h2><p class="menu-meta">通常納期は全プラン<b>1</b>か月</p>
       </div>
       <ul class="menu-list">
-        <li><span class="mn">ショート<small class="availability">受付中</small></span><span class="md">30秒以内</span><span class="mp">6,500</span><i class="mb" style="--w:14%" aria-hidden="true"></i></li>
-        <li><span class="mn">ワンコーラス<small class="availability">受付休止中</small></span><span class="md">1番程度</span><span class="mp">10,500</span><i class="mb" style="--w:42%" aria-hidden="true"></i></li>
-        <li><span class="mn">スタンダード<small class="availability">受付休止中</small></span><span class="md">フル</span><span class="mp">15,000</span><i class="mb" style="--w:100%" aria-hidden="true"></i></li>
-        <li><span class="mn">プレミアム<small class="availability">受付休止中</small></span><span class="md">フル・丁寧仕上げ</span><span class="mp">20,000</span><i class="mb" style="--w:100%" aria-hidden="true"></i></li>
+        <li><span class="mn">ショート</span><span class="md">30秒以内</span><span class="mp">6,500</span><i class="mb" style="--w:14%" aria-hidden="true"></i></li>
+        <li><span class="mn">ワンコーラス</span><span class="md">1番程度</span><span class="mp">10,500</span><i class="mb" style="--w:42%" aria-hidden="true"></i></li>
+        <li><span class="mn">スタンダード</span><span class="md">フル</span><span class="mp">15,000</span><i class="mb" style="--w:100%" aria-hidden="true"></i></li>
+        <li><span class="mn">プレミアム</span><span class="md">フル・丁寧仕上げ</span><span class="mp">20,000</span><i class="mb" style="--w:100%" aria-hidden="true"></i></li>
       </ul>
       <p class="menu-inc">全プラン込み：ピッチ・タイミング補正／ノイズ処理／ハモリ1声／マスタリング（ボーカル3トラックまで）</p>
       <ul class="menu-opt">
