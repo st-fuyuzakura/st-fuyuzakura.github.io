@@ -195,6 +195,39 @@ h3{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.02em;
 .tips summary::after{content:"＋";color:var(--sub)}
 .tips[open] summary::after{content:"−"}
 .tips p{margin:0 0 14px;color:var(--sub)}
+/* 録音の注意：左に短い項目名、右に言い切り＋理由。音量の項目にだけ入力メーター */
+.tips summary{align-items:baseline;gap:16px}
+.tips summary small{flex:1;font-family:var(--support);font-weight:400;font-size:13px;color:var(--sub)}
+.rec{display:grid;grid-template-columns:15em 1fr;margin:0 0 8px}
+.rec dt,.rec dd{margin:0;padding:16px 0;border-top:1px dashed var(--line)}
+.rec dt{font-family:var(--support);font-size:12px;letter-spacing:.12em;color:var(--sub);padding-top:20px}
+.rec dd{font-family:var(--support);font-size:14px;line-height:1.9;color:var(--sub)}
+.rec dd b{display:block;font-family:var(--jp);font-size:16px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.lv{margin:18px 0 6px;max-width:420px;font-family:var(--num);font-size:11px;color:var(--sub)}
+.lv-bar{position:relative;display:grid;grid-template-columns:repeat(30,1fr);gap:2px;height:10px}
+.lv-bar i{background:#22262B}
+.lv-bar i:nth-child(n+19):nth-child(-n+24){background:#8A9098}
+.lv-bar i:nth-child(n+28){background:repeating-linear-gradient(135deg,#5A6068 0 2px,transparent 2px 4px)}
+.lv-pk{position:absolute;top:-3px;bottom:-3px;width:2px;left:77%;background:var(--ink)}
+.lv-sc{position:relative;height:18px;margin-top:6px}
+.lv-sc span{position:absolute;transform:translateX(-50%)}
+.lv-sc span:last-child{transform:translateX(-100%)}
+.lv-lb{position:relative;height:18px;font-family:var(--support);font-size:11px}
+.lv-ok{position:absolute;left:60%;width:20%;text-align:center;color:var(--ink);white-space:nowrap}
+.lv-ng{position:absolute;right:0}
+.rec .nw{white-space:nowrap}
+@media (prefers-reduced-motion:no-preference){
+  .tips[open] .lv-pk{animation:lvpk 2.6s ease-in-out infinite alternate}
+  @keyframes lvpk{0%{left:66%}45%{left:78%}60%{left:74%}100%{left:79%}}
+}
+.rec-end{font-family:var(--support);font-size:14px;margin-left:240px !important;padding-bottom:6px}
+@media(max-width:620px){
+  .tips summary{flex-wrap:wrap;gap:2px 0}
+  .tips summary small{order:3;flex-basis:100%}
+  .rec{grid-template-columns:1fr}.rec-end{margin-left:0 !important}
+  .rec dt{padding:18px 0 2px}
+  .rec dd{border-top:0;padding:0 0 18px}
+}
 /* 送る前の確認：問いは明朝で左、答えは一言目だけ本文色で言い切り、続きは補助色 */
 .faq{display:grid;grid-template-columns:15em 1fr;margin:0}
 .faq+.tips{margin-top:0}
@@ -501,10 +534,24 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
     <dd><span class="tmp">［確認中：決まりしだい載せます］</span></dd>
   </dl>
 
-  <details class="tips"><summary>録音で気をつけること</summary>
-    <p>エアコンや換気扇は止めて、静かな部屋で録ってください。</p>
-    <p>伴奏はイヤホンやヘッドホンで聴き、マイクに入らないようにします。</p>
-    <p>音量は大きすぎず、一番大きな声で割れない程度に。迷ったら一度短く録って送ってもらえれば確認します。</p>
+  <details class="tips"><summary>録音で気をつけること<small>MIXで消せない音を、録る前に減らす</small></summary>
+    <dl class="rec">
+      <dt>部屋</dt>
+      <dd><b>エアコン・換気扇・冷蔵庫の音を止める。</b>歌う前に10秒だけ無音で録って聴くと、残っている音に気づけます。</dd>
+      <dt>伴奏</dt>
+      <dd><b>イヤホンかヘッドホンで聴く。</b>スピーカーから流すと伴奏が歌と一緒に録れてしまい、あとから分けられません。</dd>
+      <dt>音量</dt>
+      <dd><b>一番大きく歌うところで、<span class="nw">メーターが −6 あたりまで。</span></b>0に届くと音が割れて戻せません。小さめに録れたぶんはこちらで上げられます。
+        <div class="lv" aria-hidden="true">
+          <div class="lv-bar"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="lv-pk"></span></div>
+          <div class="lv-sc"><span style="left:20%">−24</span><span style="left:40%">−18</span><span style="left:60%">−12</span><span style="left:80%">−6</span><span style="left:100%">0</span></div>
+          <div class="lv-lb"><span class="lv-ok">ここに収める</span><span class="lv-ng">割れる</span></div>
+        </div>
+      </dd>
+      <dt>距離</dt>
+      <dd><b>マイクからこぶし1つ分はなす。</b>「パ行」で息が当たってボフッと鳴るときは、口をマイクの正面から少しずらします。</dd>
+    </dl>
+    <p class="rec-end">迷ったら30秒ほど録って送ってください。本番を録る前に聴いて返します。</p>
   </details>
   <p class="back-foot"><button class="back" type="button" data-go="top"><span aria-hidden="true">←</span>トップへ戻る</button></p>
 </section>
