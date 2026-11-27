@@ -540,7 +540,7 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
 
   <h3>依頼の流れ</h3>
   <ol class="steps">
-    <li><div><b>フォームを送る</b><span>名前・メールアドレス・曲名・プランを入力。素材のリンクはあとから送れます。</span></div></li>
+    <li><div><b>フォームを送る</b><span>活動名・メールアドレス・曲名を入力。素材のリンクはあとから送れます。</span></div></li>
     <li><div><b>金額と納期のご連絡</b><span>24時間以内にメールでお送りします。</span></div></li>
     <li><div><b>素材を送ってお支払い</b><span>ボーカルと伴奏をまとめた共有リンクをお送りください。ボーカルは曲の頭をそろえ、エフェクトなしで書き出します。</span></div></li>
     <li><div><b>仕上がりを確認</b><span>「サビの声をもう少し前に」など、気になる箇所を伝えてください。</span></div></li>
@@ -634,17 +634,14 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
 <!-- ORDER -->
 <section class="view wrap page" id="v-order">
   <div id="formWrap">
-    <h2>依頼フォーム</h2>
-    <p class="intro">名前・メール・曲名・プランの4つで送れます。送っただけでは料金はかかりません。こちらから金額と納期を返信するので、それを見て決めてください。</p>
+    <h2>ショートの依頼フォーム</h2>
+    <p class="intro">30秒以内のボーカルMIXは基本料金6,500円です。金額と納期はメールでお知らせします。依頼するかは、返信を見てから決められます。</p>
     <form id="orderForm" novalidate>
-      <p class="grp"><span>これだけで送れます</span><i aria-hidden="true"></i></p>
+      <p class="grp"><span>ご連絡先と曲名</span><i aria-hidden="true"></i></p>
       <div class="f"><label for="name">お名前（活動名）</label><input id="name" name="name" required aria-describedby="e-name" autocomplete="nickname"><div class="err" id="e-name"></div></div>
       <div class="f"><label for="contact">連絡先メールアドレス</label><input id="contact" name="contact" required aria-describedby="e-contact" type="email" autocomplete="email" inputmode="email"><div class="err" id="e-contact"></div></div>
       <div class="f"><label for="song">曲名</label><input id="song" name="song" required aria-describedby="e-song" placeholder="例：〇〇／原曲URLでも可"><div class="err" id="e-song"></div></div>
-      <div class="f"><label for="plan">プラン</label>
-        <select id="plan" name="plan" required aria-describedby="e-plan">
-          <option>ショート ¥6,500</option>
-        </select><p class="fh">現在は30秒以内のショートのみ受け付けています。</p><div class="err" id="e-plan"></div></div>
+      <input id="plan" name="plan" type="hidden" value="ショート ¥6,500">
       <p class="grp grp-opt"><span>わかれば書いてください</span><small>あとからメールで送っても大丈夫です</small><i aria-hidden="true"></i></p>
       <div class="f"><label for="x">XのID<em>任意</em></label><input id="x" name="x" placeholder="@"></div>
       <div class="f"><label for="files">素材のリンク<em>任意</em></label><input id="files" name="files" type="url" placeholder="ギガファイル便やGoogleドライブなど" aria-describedby="h-files"><p class="fh" id="h-files">ボーカルとオケをまとめたフォルダの共有リンクを貼ってください。録音前なら、受付メールへの返信で送れます。</p></div>
@@ -918,7 +915,6 @@ meterQuiz();
 document.getElementById('toOrderFromQuiz').addEventListener('click',()=>{
   if(chosen){
     document.getElementById('plan').value = chosen.plan;
-    clearFieldError('plan');
   }
   // 診断が追加した行だけ更新し、依頼者が書いた希望は残す。
   const note = document.getElementById('note'), marker = '【プラン診断】お急ぎ（7日以内・追加 ¥3,000）希望';
@@ -937,7 +933,7 @@ document.getElementById('retryOrder').addEventListener('click',()=>{
   btn.disabled = false; btn.textContent = '依頼を送信する';
   document.getElementById('contact').focus();
 });
-const req = {name:'お名前を入力してください', contact:'メールアドレスを入力してください', song:'曲名を入力してください', plan:'プランを選んでください'};
+const req = {name:'お名前を入力してください', contact:'メールアドレスを入力してください', song:'曲名を入力してください'};
 function clearFieldError(k){
   document.getElementById('e-'+k).textContent = '';
   document.getElementById(k).removeAttribute('aria-invalid');
