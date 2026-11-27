@@ -171,6 +171,9 @@ h3{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.02em;
 .result .r-tag{font-family:var(--support);font-size:13px;color:var(--sub);margin:0 0 6px;letter-spacing:.03em}
 .result .r-head{display:flex;justify-content:space-between;align-items:baseline;gap:4px 20px;flex-wrap:wrap;margin:0 0 18px}
 .result .r-name{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:.06em}
+/* 休止中のプランは名前の横に表示し、金額を補助色に落とす */
+.result.paused .r-name::after{content:"受付休止中";font:400 13px/1 var(--support);color:var(--sub);letter-spacing:.03em;margin-left:.9em;padding:3px 7px;border:1px solid var(--line);vertical-align:4px}
+.result.paused .price{color:var(--sub)}
 .result .cta{justify-self:start;background:transparent;color:var(--ink);border:1px solid var(--sub);font-weight:500;padding:12px 20px;min-height:48px}
 .result .cta:hover{border-color:var(--ink)}
 .result .price{font-family:var(--num);font-size:36px;font-weight:400;line-height:1.2;font-variant-numeric:tabular-nums}
@@ -380,12 +383,19 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
 .availability{display:block;font:400 13px/1.6 var(--support);color:var(--sub)}
 .hero .player{margin-bottom:12px}
 .intake{border-top:1px solid var(--line);padding-top:12px;margin-bottom:34px;font-family:var(--support)}
-.intake h2{font:600 15px/1.6 var(--support);margin:0}
-.intake ul{display:flex;flex-wrap:wrap;gap:6px 24px;list-style:none;margin:6px 0 0;padding:0}
-.intake li{font-size:14px;color:var(--sub)}
-.intake li:first-child{color:var(--ink)}
-.intake b{font-size:18px;margin-right:.4em}
-@media(max-width:620px){.intake ul{display:grid;grid-template-columns:repeat(2,1fr);column-gap:10px}}
+.in-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.intake h2{font:600 13px/1.6 var(--support);color:var(--sub);letter-spacing:.04em;margin:0}
+.intake time{font:500 12px/1 var(--num);color:var(--sub);letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.intake ul{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;list-style:none;margin:10px 0 0;padding:0}
+.intake li{display:flex;align-items:baseline;gap:.4em;font-size:13px;color:var(--sub)}
+.intake li b{font-size:15px;font-weight:400}
+/* 受付中のプランだけ本文色・大きめにし、休止中の3つと縦線で分ける */
+.intake li.on{font-size:16px;font-weight:600;color:var(--ink);padding-right:22px;margin-right:2px;border-right:1px solid var(--line)}
+.intake li.on b{font-size:18px;font-weight:600}
+.intake li.on small{font-size:13px;font-weight:400;color:var(--sub);margin-left:.3em}
+@media (prefers-reduced-motion:no-preference){.intake li.on b{animation:lamp 3.2s ease-in-out infinite}}
+@keyframes lamp{50%{opacity:.45}}
+@media(max-width:620px){.intake li.on{flex-basis:100%;border-right:0;padding-right:0;margin:0 0 2px}.intake ul{gap:6px 16px}}
 .mn{font-weight:700;font-size:17px}
 .md{color:var(--sub);font-size:13px}
 .mp{font-family:var(--num);font-weight:600;font-size:clamp(22px,5vw,28px);letter-spacing:.02em}
@@ -444,9 +454,9 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
     </div>
 
     <section class="intake" aria-labelledby="intake-title">
-      <h2 id="intake-title">依頼の受付状況</h2>
+      <div class="in-head"><h2 id="intake-title">依頼の受付状況</h2><time datetime="2026-11-26">11.26 時点</time></div>
       <ul>
-        <li><b role="img" aria-label="受付中">○</b>ショート</li>
+        <li class="on"><b role="img" aria-label="受付中">○</b>ショート<small>30秒以内・受付中</small></li>
         <li><b role="img" aria-label="受付休止中">×</b>ワンコーラス</li>
         <li><b role="img" aria-label="受付休止中">×</b>スタンダード</li>
         <li><b role="img" aria-label="受付休止中">×</b>プレミアム</li>
@@ -889,7 +899,8 @@ function evalQuiz(){
   sheet.innerHTML = rows.map(r=>'<div'+(r[2]?' class="'+r[2]+'"':'')+'><dt>'+r[0]+'</dt><dd>'+r[1]+'</dd></div>').join('');
   sheet.hidden = !rows.length;
   let d = key==='ask' ? '曲の長さが決まっていなくても送れます。送信後のメールで金額と納期をお知らせします。' : 'トラックやハモリが多いときは、送信後のメールで追加分を含めた金額をお知らせします。';
-  if(key!=='short') d = key==='ask' ? '現在受付中のショートは30秒以内です。長さが決まったら選び直してください。' : 'このプランは受付休止中です。';
+  if(key!=='short') d = key==='ask' ? '現在受付中のショートは30秒以内です。長さが決まったら選び直してください。' : 'このプランはいま受付を休止しています。料金は目安として載せています。サビだけなど30秒以内に収まる部分なら、ショートで依頼できます。';
+  document.getElementById('result').classList.toggle('paused', key!=='short' && key!=='ask');
   document.getElementById('toOrderFromQuiz').hidden = key!=='short';
   if(key==='ask' && rush) d += 'お急ぎは7日以内（追加 ¥3,000）です。';
   document.getElementById('rDesc').textContent = d;
