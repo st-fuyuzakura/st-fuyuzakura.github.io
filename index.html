@@ -265,7 +265,7 @@ h3{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.02em;
 .opt tr.og:first-child th{padding-top:0}
 .opt td{padding:16px 16px 16px 0;vertical-align:baseline}
 .opt b{display:block;font-weight:500;font-size:16px;line-height:1.6}
-.opt small{display:block;margin-top:3px;font-family:var(--support);font-size:13px;line-height:1.7;color:var(--sub)}
+.opt small{text-wrap:pretty;display:block;margin-top:3px;font-family:var(--support);font-size:13px;line-height:1.7;color:var(--sub)}
 .opt td.n{font-weight:400;font-size:19px;color:var(--ink);padding-right:0;font-variant-numeric:tabular-nums}
 .opt .u,.set .u{font-size:.68em;color:var(--sub);margin:0 1px}
 .set{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;margin:44px 0 0;padding:16px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--line)}
@@ -295,6 +295,11 @@ dl.spec dt{font-family:var(--support);color:var(--sub);padding-right:24px;font-s
   .plans tbody tr:first-child{border-top:1px solid var(--ink)}
   #v-pro .plans tbody tr:first-child td{border-top:0}
   #v-pro .plans td{padding:0}
+  /* 金額の列幅を固定して、歌の長さのバーをどのプランでも同じ物差しにする。無料修正は2行目の右端に寄せる */
+  #v-pro .plans tr{grid-template-columns:1fr 7.2em}
+  #v-pro .plans td:nth-child(3){grid-column:1;justify-self:start}
+  #v-pro .plans td:nth-child(4){grid-column:1/-1;justify-self:end;white-space:nowrap}
+  #v-pro .tag{margin-left:8px;padding:3px 6px}
   #v-pro .plans td.n{text-align:right;font-size:24px;line-height:1.3}
   #v-pro .plans td:not(:first-child):not(.n){grid-row:2;margin-top:12px;font-size:13px;padding:0}
   #v-pro .plans td:nth-child(4){text-align:right}
@@ -380,7 +385,13 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
 .mb::after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--w);background:var(--sub)}
 .menu-list li:hover .mb::after{background:var(--ink)}
 .menu-list li:first-child{border-top:1px solid var(--ink)}
-.availability{display:block;font:400 13px/1.6 var(--support);color:var(--sub)}
+/* 料金ページの受付状況：受付中は○つきで本文色、休止中は枠つきの小さな札にして金額も補助色に落とす */
+#v-pro .tag{display:inline-block;margin:0 0 0 12px;padding:3px 7px;border:1px solid var(--line);font:400 12px/1.2 var(--support);letter-spacing:.03em;color:var(--sub);vertical-align:2px}
+#v-pro tr.on .tag{border-color:transparent;padding-left:0;padding-right:0;color:var(--ink);font-weight:500}
+#v-pro tr.on .tag i{font-style:normal;margin-right:.35em}
+@media (prefers-reduced-motion:no-preference){#v-pro tr.on .tag i{display:inline-block;animation:lamp 3.2s ease-in-out infinite}}
+#v-pro tr.paused td.n{color:var(--sub)}
+#v-pro tr.paused .bar::after{background:var(--sub)}
 .hero .player{margin-bottom:12px}
 .intake{border-top:1px solid var(--line);padding-top:12px;margin-bottom:34px;font-family:var(--support)}
 .in-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
@@ -600,16 +611,16 @@ footer::before{content:"";display:block;height:9px;border-top:1px solid var(--li
   <div class="tbl"><table class="plans">
     <thead><tr><th>プラン／歌の長さ</th><th>料金</th><th>納期</th><th>無料修正</th></tr></thead>
     <tbody>
-      <tr><td><b>ショート</b><small class="availability">受付中</small><span class="len">30秒以内</span><i class="bar" style="--w:14%" aria-hidden="true"></i></td><td class="n">6,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
-      <tr><td><b>ワンコーラス</b><small class="availability">受付休止中</small><span class="len">1番程度</span><i class="bar" style="--w:42%" aria-hidden="true"></i></td><td class="n">10,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
-      <tr><td><b>スタンダード</b><small class="availability">受付休止中</small><span class="len">フル</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">15,000</td><td data-l="納期">1か月</td><td data-l="無料修正">2回</td></tr>
-      <tr><td><b>プレミアム</b><small class="availability">受付休止中</small><span class="len">フル・丁寧仕上げ</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">20,000</td><td data-l="納期">1か月</td><td data-l="無料修正">3〜4回</td></tr>
+      <tr class="on"><td><b>ショート<small class="tag"><i aria-hidden="true">○</i>受付中</small></b><span class="len">30秒以内</span><i class="bar" style="--w:14%" aria-hidden="true"></i></td><td class="n">6,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
+      <tr class="paused"><td><b>ワンコーラス<small class="tag">受付休止中</small></b><span class="len">1番程度</span><i class="bar" style="--w:42%" aria-hidden="true"></i></td><td class="n">10,500</td><td data-l="納期">1か月</td><td data-l="無料修正">1回</td></tr>
+      <tr class="paused"><td><b>スタンダード<small class="tag">受付休止中</small></b><span class="len">フル</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">15,000</td><td data-l="納期">1か月</td><td data-l="無料修正">2回</td></tr>
+      <tr class="paused"><td><b>プレミアム<small class="tag">受付休止中</small></b><span class="len">フル・丁寧仕上げ</span><i class="bar" style="--w:100%" aria-hidden="true"></i></td><td class="n">20,000</td><td data-l="納期">1か月</td><td data-l="無料修正">3〜4回</td></tr>
     </tbody>
   </table></div>
 
-  <h3>マスタリングのみ</h3>
+  <h3>マスタリングだけ頼むとき</h3>
   <div class="tbl"><table class="opt"><tbody>
-    <tr><td><b>マスタリングのみ</b><small>MIX済みの音源（1ファイル）の音量と音質を整えて仕上げます。ボーカルの補正やノイズ処理は含みません。受付休止中</small></td><td class="n"><span class="u">¥</span>3,000</td></tr>
+    <tr class="paused"><td><b>マスタリングのみ<small class="tag">受付休止中</small></b><small>MIX済みの音源（1ファイル）の音量と音質を整えて仕上げます。ボーカルの補正やノイズ処理は含みません。</small></td><td class="n"><span class="u">¥</span>3,000</td></tr>
   </tbody></table></div>
 
   <h3>追加料金がかかる作業</h3>
